@@ -47,13 +47,13 @@
  * runtime initialization.
  */
 
+typedef	int (*notifier_fn_t)(struct notifier_block *nb,
+			unsigned long action, void *data);
+
 struct notifier_block {
-	int (*notifier_call)(struct notifier_block *, unsigned long, void *);
+	notifier_fn_t notifier_call;
 	struct notifier_block __rcu *next;
 	int priority;
-#ifdef CONFIG_ZERO_WAIT
-	void *ptr;
-#endif
 };
 
 struct atomic_notifier_head {

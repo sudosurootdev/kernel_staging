@@ -1,4 +1,4 @@
-/* Copyright (c) 2008-2010, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2008-2010, Code Aurora Forum. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -8,6 +8,11 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
  *
  */
 /*
@@ -177,7 +182,7 @@ static int smd_pkt_write(struct file *file, const char __user *buf,
 	if (count > MAX_BUF_SIZE)
 		return -EINVAL;
 
-	DBG("writting %d bytes\n", count);
+	DBG("writing %d bytes\n", count);
 
 	smd_pkt_devp = file->private_data;
 	if (!smd_pkt_devp || !smd_pkt_devp->ch)

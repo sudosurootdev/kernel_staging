@@ -47,28 +47,16 @@ obj-$(CONFIG_RT2X00)	+= rt2x00/
 
 obj-$(CONFIG_P54_COMMON)	+= p54/
 
-obj-$(CONFIG_ATH_COMMON)	+= ath/
+obj-$(CONFIG_ATH_CARDS)		+= ath/
 
 obj-$(CONFIG_MAC80211_HWSIM)	+= mac80211_hwsim.o
 
-obj-$(CONFIG_WL1251)	+= wl1251/
-obj-$(CONFIG_WL12XX)	+= wl12xx/
-obj-$(CONFIG_WL12XX_PLATFORM_DATA)	+= wl12xx/
-
-obj-$(CONFIG_IWM)	+= iwmc3200wifi/
+obj-$(CONFIG_WL_TI)	+= ti/
 
 obj-$(CONFIG_MWIFIEX)	+= mwifiex/
-
-#[BEGIN][LGE_WIFI][moon-wifi@lge.com] seperate bcm4334/bcm4335(bcm4339)
-ifneq ($(CONFIG_BCM4334),)
-obj-$(CONFIG_BCMDHD)    += bcm4334/
-else
-obj-$(CONFIG_BCMDHD)	+= bcmdhd/
-endif
-#[END][LGE_WIFI][moon-wifi@lge.com] seperate bcm4334/bcm4335/bcm4339
 
 obj-$(CONFIG_BRCMFMAC)	+= brcm80211/
 obj-$(CONFIG_BRCMSMAC)	+= brcm80211/
 
-obj-$(CONFIG_LIBRA_SDIOIF)	+= libra/
-obj-$(CONFIG_WCNSS_CORE)	+= wcnss/
+obj-$(CONFIG_CW1200)	+= cw1200/
+obj-$(CONFIG_RSI_91X)	+= rsi/

@@ -1,19 +1,3 @@
-/*****************************************************************************
-* wanrouter.h	Definitions for the WAN Multiprotocol Router Module.
-*		This module provides API and common services for WAN Link
-*		Drivers and is completely hardware-independent.
-*
-* Author: 	Nenad Corbic <ncorbic@sangoma.com>
-*		Gideon Hack 	
-* Additions:	Arnaldo Melo
-*
-* Copyright:	(c) 1995-2000 Sangoma Technologies Inc.
-*
-*		This program is free software; you can redistribute it and/or
-*		modify it under the terms of the GNU General Public License
-*		as published by the Free Software Foundation; either version
-*		2 of the License, or (at your option) any later version.
-* ============================================================================
 * Jul 21, 2000  Nenad Corbic	Added WAN_FT1_READY State
 * Feb 24, 2000  Nenad Corbic    Added support for socket based x25api
 * Jan 28, 2000  Nenad Corbic    Added support for the ASYNC protocol.
@@ -529,4 +513,14 @@ extern long wanrouter_ioctl(struct file *file, unsigned int cmd, unsigned long a
 extern struct wan_device *wanrouter_router_devlist;
 
 #endif	/* __KERNEL__ */
+=======
+/*
+ * wanrouter.h	Legacy declarations kept around until X25 is removed
+ */
+
+#ifndef	_ROUTER_H
+#define	_ROUTER_H
+
+#include <uapi/linux/wanrouter.h>
+
 #endif	/* _ROUTER_H */

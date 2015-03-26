@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -14,55 +14,50 @@
 #define _CORESIGHT_PRIV_H
 
 #include <linux/bitops.h>
+#include <linux/io.h>
+#include <linux/coresight.h>
 
-/* Coresight management registers (0xF00-0xFCC)
- * 0xFA0 - 0xFA4: Management	registers in PFTv1.0
+/*
+ * Coresight management registers (0xf00-0xfcc)
+ * 0xfa0 - 0xfa4: Management	registers in PFTv1.0
  *		  Trace		registers in PFTv1.1
  */
-#define CORESIGHT_ITCTRL	(0xF00)
-#define CORESIGHT_CLAIMSET	(0xFA0)
-#define CORESIGHT_CLAIMCLR	(0xFA4)
-#define CORESIGHT_LAR		(0xFB0)
-#define CORESIGHT_LSR		(0xFB4)
-#define CORESIGHT_AUTHSTATUS	(0xFB8)
-#define CORESIGHT_DEVID		(0xFC8)
-#define CORESIGHT_DEVTYPE	(0xFCC)
+#define CORESIGHT_ITCTRL	0xf00
+#define CORESIGHT_CLAIMSET	0xfa0
+#define CORESIGHT_CLAIMCLR	0xfa4
+#define CORESIGHT_LAR		0xfb0
+#define CORESIGHT_LSR		0xfb4
+#define CORESIGHT_AUTHSTATUS	0xfb8
+#define CORESIGHT_DEVID		0xfc8
+#define CORESIGHT_DEVTYPE	0xfcc
 
-#define CORESIGHT_UNLOCK	(0xC5ACCE55)
+#define TIMEOUT_US		100
+#define BMVAL(val, lsb, msb)	((val & GENMASK(msb, lsb)) >> lsb)
 
-#define TIMEOUT_US		(100)
+static inline void CS_LOCK(void __iomem *addr)
+{
+	do {
+		/* Wait for things to settle */
+		mb();
+		writel_relaxed(0x0, addr + CORESIGHT_LAR);
+	} while (0);
+}
 
-#define BM(lsb, msb)		((BIT(msb) - BIT(lsb)) + BIT(msb))
-#define BMVAL(val, lsb, msb)	((val & BM(lsb, msb)) >> lsb)
-#define BVAL(val, n)		((val & BIT(n)) >> n)
+static inline void CS_UNLOCK(void __iomem *addr)
+{
+	do {
+		writel_relaxed(CORESIGHT_UNLOCK, addr + CORESIGHT_LAR);
+		/* Make sure everyone has seen this */
+		mb();
+	} while (0);
+}
 
-#ifdef CONFIG_CORESIGHT_FUSE
-extern bool coresight_fuse_access_disabled(void);
-extern bool coresight_fuse_apps_access_disabled(void);
+#ifdef CONFIG_CORESIGHT_SOURCE_ETM3X
+extern int etm_readl_cp14(u32 off, unsigned int *val);
+extern int etm_writel_cp14(u32 off, u32 val);
 #else
-static inline bool coresight_fuse_access_disabled(void) { return false; }
-static inline bool coresight_fuse_apps_access_disabled(void) { return false; }
-#endif
-#ifdef CONFIG_CORESIGHT_CSR
-extern void msm_qdss_csr_enable_bam_to_usb(void);
-extern void msm_qdss_csr_disable_bam_to_usb(void);
-extern void msm_qdss_csr_disable_flush(void);
-extern int coresight_csr_hwctrl_set(uint64_t addr, uint32_t val);
-extern void coresight_csr_set_byte_cntr(uint32_t);
-#else
-static inline void msm_qdss_csr_enable_bam_to_usb(void) {}
-static inline void msm_qdss_csr_disable_bam_to_usb(void) {}
-static inline void msm_qdss_csr_disable_flush(void) {}
-static inline int coresight_csr_hwctrl_set(uint64_t addr,
-					   uint32_t val) { return -ENOSYS; }
-static inline void coresight_csr_set_byte_cntr(uint32_t val) {}
-#endif
-#ifdef CONFIG_CORESIGHT_ETM
-extern unsigned int etm_readl_cp14(uint32_t off);
-extern void etm_writel_cp14(uint32_t val, uint32_t off);
-#else
-static inline unsigned int etm_readl_cp14(uint32_t off) { return 0; }
-static inline void etm_writel_cp14(uint32_t val, uint32_t off) {}
+static inline int etm_readl_cp14(u32 off, unsigned int *val) { return 0; }
+static inline int etm_writel_cp14(u32 off, u32 val) { return 0; }
 #endif
 
 #endif

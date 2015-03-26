@@ -2,19 +2,10 @@
 # Makefile for CoreSight drivers.
 #
 obj-$(CONFIG_CORESIGHT) += coresight.o
-obj-$(CONFIG_CORESIGHT_FUSE) += coresight-fuse.o
-obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
-obj-$(CONFIG_CORESIGHT_CSR) += coresight-csr.o
-obj-$(CONFIG_CORESIGHT_TMC) += coresight-tmc.o
-obj-$(CONFIG_CORESIGHT_TPIU) += coresight-tpiu.o
-obj-$(CONFIG_CORESIGHT_ETB) += coresight-etb.o
-obj-$(CONFIG_CORESIGHT_FUNNEL) += coresight-funnel.o
-obj-$(CONFIG_CORESIGHT_REPLICATOR) += coresight-replicator.o
-obj-$(CONFIG_CORESIGHT_STM) += coresight-stm.o
-obj-$(CONFIG_CORESIGHT_HWEVENT) += coresight-hwevent.o
-obj-$(CONFIG_CORESIGHT_ETM) += coresight-etm.o coresight-etm-cp14.o
-obj-$(CONFIG_CORESIGHT_AUDIO_ETM) += coresight-audio-etm.o
-obj-$(CONFIG_CORESIGHT_MODEM_ETM) += coresight-modem-etm.o
-obj-$(CONFIG_CORESIGHT_WCN_ETM) += coresight-wcn-etm.o
-obj-$(CONFIG_CORESIGHT_RPM_ETM) += coresight-rpm-etm.o
-obj-$(CONFIG_CORESIGHT_EVENT) += coresight-event.o
+obj-$(CONFIG_OF) += of_coresight.o
+obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
+obj-$(CONFIG_CORESIGHT_SINK_TPIU) += coresight-tpiu.o
+obj-$(CONFIG_CORESIGHT_SINK_ETBV10) += coresight-etb10.o
+obj-$(CONFIG_CORESIGHT_LINKS_AND_SINKS) += coresight-funnel.o \
+					   coresight-replicator.o
+obj-$(CONFIG_CORESIGHT_SOURCE_ETM3X) += coresight-etm3x.o coresight-etm-cp14.o

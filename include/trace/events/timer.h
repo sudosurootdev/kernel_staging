@@ -43,17 +43,15 @@ DEFINE_EVENT(timer_class, timer_init,
  */
 TRACE_EVENT(timer_start,
 
-	TP_PROTO(struct timer_list *timer,
-		 unsigned long expires, char deferrable),
+	TP_PROTO(struct timer_list *timer, unsigned long expires),
 
-	TP_ARGS(timer, expires, deferrable),
+	TP_ARGS(timer, expires),
 
 	TP_STRUCT__entry(
 		__field( void *,	timer		)
 		__field( void *,	function	)
 		__field( unsigned long,	expires		)
 		__field( unsigned long,	now		)
-		__field(char,	deferrable)
 	),
 
 	TP_fast_assign(
@@ -61,12 +59,11 @@ TRACE_EVENT(timer_start,
 		__entry->function	= timer->function;
 		__entry->expires	= expires;
 		__entry->now		= jiffies;
-		__entry->deferrable     = deferrable;
 	),
 
-	TP_printk("timer=%p function=%pf expires=%lu [timeout=%ld] defer=%c",
+	TP_printk("timer=%p function=%pf expires=%lu [timeout=%ld]",
 		  __entry->timer, __entry->function, __entry->expires,
-		  (long)__entry->expires - __entry->now, __entry->deferrable)
+		  (long)__entry->expires - __entry->now)
 );
 
 /**
@@ -126,7 +123,7 @@ DEFINE_EVENT(timer_class, timer_cancel,
 
 /**
  * hrtimer_init - called when the hrtimer is initialized
- * @timer:	pointer to struct hrtimer
+ * @hrtimer:	pointer to struct hrtimer
  * @clockid:	the hrtimers clock
  * @mode:	the hrtimers mode
  */
@@ -158,7 +155,7 @@ TRACE_EVENT(hrtimer_init,
 
 /**
  * hrtimer_start - called when the hrtimer is started
- * @timer: pointer to struct hrtimer
+ * @hrtimer: pointer to struct hrtimer
  */
 TRACE_EVENT(hrtimer_start,
 
@@ -189,8 +186,8 @@ TRACE_EVENT(hrtimer_start,
 );
 
 /**
- * htimmer_expire_entry - called immediately before the hrtimer callback
- * @timer:	pointer to struct hrtimer
+ * hrtimer_expire_entry - called immediately before the hrtimer callback
+ * @hrtimer:	pointer to struct hrtimer
  * @now:	pointer to variable which contains current time of the
  *		timers base.
  *
@@ -237,7 +234,7 @@ DECLARE_EVENT_CLASS(hrtimer_class,
 
 /**
  * hrtimer_expire_exit - called immediately after the hrtimer callback returns
- * @timer:	pointer to struct hrtimer
+ * @hrtimer:	pointer to struct hrtimer
  *
  * When used in combination with the hrtimer_expire_entry tracepoint we can
  * determine the runtime of the callback function.
@@ -325,6 +322,27 @@ TRACE_EVENT(itimer_expire,
 	TP_printk("which=%d pid=%d now=%llu", __entry->which,
 		  (int) __entry->pid, (unsigned long long)__entry->now)
 );
+
+#ifdef CONFIG_NO_HZ_COMMON
+TRACE_EVENT(tick_stop,
+
+	TP_PROTO(int success, char *error_msg),
+
+	TP_ARGS(success, error_msg),
+
+	TP_STRUCT__entry(
+		__field( int ,		success	)
+		__string( msg, 		error_msg )
+	),
+
+	TP_fast_assign(
+		__entry->success	= success;
+		__assign_str(msg, error_msg);
+	),
+
+	TP_printk("success=%s msg=%s",  __entry->success ? "yes" : "no", __get_str(msg))
+);
+#endif
 
 #endif /*  _TRACE_TIMER_H */
 

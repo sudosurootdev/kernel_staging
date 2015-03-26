@@ -10,501 +10,582 @@
  * GNU General Public License for more details.
  */
 
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
 #include <linux/kernel.h>
 #include <linux/types.h>
+#include <linux/bug.h>
 #include <asm/hardware/cp14.h>
 
-static unsigned int etm_read_reg(uint32_t reg)
+#include "coresight-etm.h"
+
+int etm_readl_cp14(u32 reg, unsigned int *val)
 {
 	switch (reg) {
-	case 0x0:
-		return etm_read(ETMCR);
-	case 0x1:
-		return etm_read(ETMCCR);
-	case 0x2:
-		return etm_read(ETMTRIGGER);
-	case 0x4:
-		return etm_read(ETMSR);
-	case 0x5:
-		return etm_read(ETMSCR);
-	case 0x6:
-		return etm_read(ETMTSSCR);
-	case 0x8:
-		return etm_read(ETMTEEVR);
-	case 0x9:
-		return etm_read(ETMTECR1);
-	case 0xB:
-		return etm_read(ETMFFLR);
-	case 0x10:
-		return etm_read(ETMACVR0);
-	case 0x11:
-		return etm_read(ETMACVR1);
-	case 0x12:
-		return etm_read(ETMACVR2);
-	case 0x13:
-		return etm_read(ETMACVR3);
-	case 0x14:
-		return etm_read(ETMACVR4);
-	case 0x15:
-		return etm_read(ETMACVR5);
-	case 0x16:
-		return etm_read(ETMACVR6);
-	case 0x17:
-		return etm_read(ETMACVR7);
-	case 0x18:
-		return etm_read(ETMACVR8);
-	case 0x19:
-		return etm_read(ETMACVR9);
-	case 0x1A:
-		return etm_read(ETMACVR10);
-	case 0x1B:
-		return etm_read(ETMACVR11);
-	case 0x1C:
-		return etm_read(ETMACVR12);
-	case 0x1D:
-		return etm_read(ETMACVR13);
-	case 0x1E:
-		return etm_read(ETMACVR14);
-	case 0x1F:
-		return etm_read(ETMACVR15);
-	case 0x20:
-		return etm_read(ETMACTR0);
-	case 0x21:
-		return etm_read(ETMACTR1);
-	case 0x22:
-		return etm_read(ETMACTR2);
-	case 0x23:
-		return etm_read(ETMACTR3);
-	case 0x24:
-		return etm_read(ETMACTR4);
-	case 0x25:
-		return etm_read(ETMACTR5);
-	case 0x26:
-		return etm_read(ETMACTR6);
-	case 0x27:
-		return etm_read(ETMACTR7);
-	case 0x28:
-		return etm_read(ETMACTR8);
-	case 0x29:
-		return etm_read(ETMACTR9);
-	case 0x2A:
-		return etm_read(ETMACTR10);
-	case 0x2B:
-		return etm_read(ETMACTR11);
-	case 0x2C:
-		return etm_read(ETMACTR12);
-	case 0x2D:
-		return etm_read(ETMACTR13);
-	case 0x2E:
-		return etm_read(ETMACTR14);
-	case 0x2F:
-		return etm_read(ETMACTR15);
-	case 0x50:
-		return etm_read(ETMCNTRLDVR0);
-	case 0x51:
-		return etm_read(ETMCNTRLDVR1);
-	case 0x52:
-		return etm_read(ETMCNTRLDVR2);
-	case 0x53:
-		return etm_read(ETMCNTRLDVR3);
-	case 0x54:
-		return etm_read(ETMCNTENR0);
-	case 0x55:
-		return etm_read(ETMCNTENR1);
-	case 0x56:
-		return etm_read(ETMCNTENR2);
-	case 0x57:
-		return etm_read(ETMCNTENR3);
-	case 0x58:
-		return etm_read(ETMCNTRLDEVR0);
-	case 0x59:
-		return etm_read(ETMCNTRLDEVR1);
-	case 0x5A:
-		return etm_read(ETMCNTRLDEVR2);
-	case 0x5B:
-		return etm_read(ETMCNTRLDEVR3);
-	case 0x5C:
-		return etm_read(ETMCNTVR0);
-	case 0x5D:
-		return etm_read(ETMCNTVR1);
-	case 0x5E:
-		return etm_read(ETMCNTVR2);
-	case 0x5F:
-		return etm_read(ETMCNTVR3);
-	case 0x60:
-		return etm_read(ETMSQ12EVR);
-	case 0x61:
-		return etm_read(ETMSQ21EVR);
-	case 0x62:
-		return etm_read(ETMSQ23EVR);
-	case 0x63:
-		return etm_read(ETMSQ31EVR);
-	case 0x64:
-		return etm_read(ETMSQ32EVR);
-	case 0x65:
-		return etm_read(ETMSQ13EVR);
-	case 0x67:
-		return etm_read(ETMSQR);
-	case 0x68:
-		return etm_read(ETMEXTOUTEVR0);
-	case 0x69:
-		return etm_read(ETMEXTOUTEVR1);
-	case 0x6A:
-		return etm_read(ETMEXTOUTEVR2);
-	case 0x6B:
-		return etm_read(ETMEXTOUTEVR3);
-	case 0x6C:
-		return etm_read(ETMCIDCVR0);
-	case 0x6D:
-		return etm_read(ETMCIDCVR1);
-	case 0x6E:
-		return etm_read(ETMCIDCVR2);
-	case 0x6F:
-		return etm_read(ETMCIDCMR);
-	case 0x70:
-		return etm_read(ETMIMPSPEC0);
-	case 0x71:
-		return etm_read(ETMIMPSPEC1);
-	case 0x72:
-		return etm_read(ETMIMPSPEC2);
-	case 0x73:
-		return etm_read(ETMIMPSPEC3);
-	case 0x74:
-		return etm_read(ETMIMPSPEC4);
-	case 0x75:
-		return etm_read(ETMIMPSPEC5);
-	case 0x76:
-		return etm_read(ETMIMPSPEC6);
-	case 0x77:
-		return etm_read(ETMIMPSPEC7);
-	case 0x78:
-		return etm_read(ETMSYNCFR);
-	case 0x79:
-		return etm_read(ETMIDR);
-	case 0x7A:
-		return etm_read(ETMCCER);
-	case 0x7B:
-		return etm_read(ETMEXTINSELR);
-	case 0x7C:
-		return etm_read(ETMTESSEICR);
-	case 0x7D:
-		return etm_read(ETMEIBCR);
-	case 0x7E:
-		return etm_read(ETMTSEVR);
-	case 0x7F:
-		return etm_read(ETMAUXCR);
-	case 0x80:
-		return etm_read(ETMTRACEIDR);
-	case 0x90:
-		return etm_read(ETMVMIDCVR);
-	case 0xC1:
-		return etm_read(ETMOSLSR);
-	case 0xC2:
-		return etm_read(ETMOSSRR);
-	case 0xC4:
-		return etm_read(ETMPDCR);
-	case 0xC5:
-		return etm_read(ETMPDSR);
-	default:
-		WARN(1, "invalid CP14 access to ETM reg: %lx",
-							(unsigned long)reg);
+	case ETMCR:
+		*val = etm_read(ETMCR);
 		return 0;
+	case ETMCCR:
+		*val = etm_read(ETMCCR);
+		return 0;
+	case ETMTRIGGER:
+		*val = etm_read(ETMTRIGGER);
+		return 0;
+	case ETMSR:
+		*val = etm_read(ETMSR);
+		return 0;
+	case ETMSCR:
+		*val = etm_read(ETMSCR);
+		return 0;
+	case ETMTSSCR:
+		*val = etm_read(ETMTSSCR);
+		return 0;
+	case ETMTEEVR:
+		*val = etm_read(ETMTEEVR);
+		return 0;
+	case ETMTECR1:
+		*val = etm_read(ETMTECR1);
+		return 0;
+	case ETMFFLR:
+		*val = etm_read(ETMFFLR);
+		return 0;
+	case ETMACVRn(0):
+		*val = etm_read(ETMACVR0);
+		return 0;
+	case ETMACVRn(1):
+		*val = etm_read(ETMACVR1);
+		return 0;
+	case ETMACVRn(2):
+		*val = etm_read(ETMACVR2);
+		return 0;
+	case ETMACVRn(3):
+		*val = etm_read(ETMACVR3);
+		return 0;
+	case ETMACVRn(4):
+		*val = etm_read(ETMACVR4);
+		return 0;
+	case ETMACVRn(5):
+		*val = etm_read(ETMACVR5);
+		return 0;
+	case ETMACVRn(6):
+		*val = etm_read(ETMACVR6);
+		return 0;
+	case ETMACVRn(7):
+		*val = etm_read(ETMACVR7);
+		return 0;
+	case ETMACVRn(8):
+		*val = etm_read(ETMACVR8);
+		return 0;
+	case ETMACVRn(9):
+		*val = etm_read(ETMACVR9);
+		return 0;
+	case ETMACVRn(10):
+		*val = etm_read(ETMACVR10);
+		return 0;
+	case ETMACVRn(11):
+		*val = etm_read(ETMACVR11);
+		return 0;
+	case ETMACVRn(12):
+		*val = etm_read(ETMACVR12);
+		return 0;
+	case ETMACVRn(13):
+		*val = etm_read(ETMACVR13);
+		return 0;
+	case ETMACVRn(14):
+		*val = etm_read(ETMACVR14);
+		return 0;
+	case ETMACVRn(15):
+		*val = etm_read(ETMACVR15);
+		return 0;
+	case ETMACTRn(0):
+		*val = etm_read(ETMACTR0);
+		return 0;
+	case ETMACTRn(1):
+		*val = etm_read(ETMACTR1);
+		return 0;
+	case ETMACTRn(2):
+		*val = etm_read(ETMACTR2);
+		return 0;
+	case ETMACTRn(3):
+		*val = etm_read(ETMACTR3);
+		return 0;
+	case ETMACTRn(4):
+		*val = etm_read(ETMACTR4);
+		return 0;
+	case ETMACTRn(5):
+		*val = etm_read(ETMACTR5);
+		return 0;
+	case ETMACTRn(6):
+		*val = etm_read(ETMACTR6);
+		return 0;
+	case ETMACTRn(7):
+		*val = etm_read(ETMACTR7);
+		return 0;
+	case ETMACTRn(8):
+		*val = etm_read(ETMACTR8);
+		return 0;
+	case ETMACTRn(9):
+		*val = etm_read(ETMACTR9);
+		return 0;
+	case ETMACTRn(10):
+		*val = etm_read(ETMACTR10);
+		return 0;
+	case ETMACTRn(11):
+		*val = etm_read(ETMACTR11);
+		return 0;
+	case ETMACTRn(12):
+		*val = etm_read(ETMACTR12);
+		return 0;
+	case ETMACTRn(13):
+		*val = etm_read(ETMACTR13);
+		return 0;
+	case ETMACTRn(14):
+		*val = etm_read(ETMACTR14);
+		return 0;
+	case ETMACTRn(15):
+		*val = etm_read(ETMACTR15);
+		return 0;
+	case ETMCNTRLDVRn(0):
+		*val = etm_read(ETMCNTRLDVR0);
+		return 0;
+	case ETMCNTRLDVRn(1):
+		*val = etm_read(ETMCNTRLDVR1);
+		return 0;
+	case ETMCNTRLDVRn(2):
+		*val = etm_read(ETMCNTRLDVR2);
+		return 0;
+	case ETMCNTRLDVRn(3):
+		*val = etm_read(ETMCNTRLDVR3);
+		return 0;
+	case ETMCNTENRn(0):
+		*val = etm_read(ETMCNTENR0);
+		return 0;
+	case ETMCNTENRn(1):
+		*val = etm_read(ETMCNTENR1);
+		return 0;
+	case ETMCNTENRn(2):
+		*val = etm_read(ETMCNTENR2);
+		return 0;
+	case ETMCNTENRn(3):
+		*val = etm_read(ETMCNTENR3);
+		return 0;
+	case ETMCNTRLDEVRn(0):
+		*val = etm_read(ETMCNTRLDEVR0);
+		return 0;
+	case ETMCNTRLDEVRn(1):
+		*val = etm_read(ETMCNTRLDEVR1);
+		return 0;
+	case ETMCNTRLDEVRn(2):
+		*val = etm_read(ETMCNTRLDEVR2);
+		return 0;
+	case ETMCNTRLDEVRn(3):
+		*val = etm_read(ETMCNTRLDEVR3);
+		return 0;
+	case ETMCNTVRn(0):
+		*val = etm_read(ETMCNTVR0);
+		return 0;
+	case ETMCNTVRn(1):
+		*val = etm_read(ETMCNTVR1);
+		return 0;
+	case ETMCNTVRn(2):
+		*val = etm_read(ETMCNTVR2);
+		return 0;
+	case ETMCNTVRn(3):
+		*val = etm_read(ETMCNTVR3);
+		return 0;
+	case ETMSQ12EVR:
+		*val = etm_read(ETMSQ12EVR);
+		return 0;
+	case ETMSQ21EVR:
+		*val = etm_read(ETMSQ21EVR);
+		return 0;
+	case ETMSQ23EVR:
+		*val = etm_read(ETMSQ23EVR);
+		return 0;
+	case ETMSQ31EVR:
+		*val = etm_read(ETMSQ31EVR);
+		return 0;
+	case ETMSQ32EVR:
+		*val = etm_read(ETMSQ32EVR);
+		return 0;
+	case ETMSQ13EVR:
+		*val = etm_read(ETMSQ13EVR);
+		return 0;
+	case ETMSQR:
+		*val = etm_read(ETMSQR);
+		return 0;
+	case ETMEXTOUTEVRn(0):
+		*val = etm_read(ETMEXTOUTEVR0);
+		return 0;
+	case ETMEXTOUTEVRn(1):
+		*val = etm_read(ETMEXTOUTEVR1);
+		return 0;
+	case ETMEXTOUTEVRn(2):
+		*val = etm_read(ETMEXTOUTEVR2);
+		return 0;
+	case ETMEXTOUTEVRn(3):
+		*val = etm_read(ETMEXTOUTEVR3);
+		return 0;
+	case ETMCIDCVRn(0):
+		*val = etm_read(ETMCIDCVR0);
+		return 0;
+	case ETMCIDCVRn(1):
+		*val = etm_read(ETMCIDCVR1);
+		return 0;
+	case ETMCIDCVRn(2):
+		*val = etm_read(ETMCIDCVR2);
+		return 0;
+	case ETMCIDCMR:
+		*val = etm_read(ETMCIDCMR);
+		return 0;
+	case ETMIMPSPEC0:
+		*val = etm_read(ETMIMPSPEC0);
+		return 0;
+	case ETMIMPSPEC1:
+		*val = etm_read(ETMIMPSPEC1);
+		return 0;
+	case ETMIMPSPEC2:
+		*val = etm_read(ETMIMPSPEC2);
+		return 0;
+	case ETMIMPSPEC3:
+		*val = etm_read(ETMIMPSPEC3);
+		return 0;
+	case ETMIMPSPEC4:
+		*val = etm_read(ETMIMPSPEC4);
+		return 0;
+	case ETMIMPSPEC5:
+		*val = etm_read(ETMIMPSPEC5);
+		return 0;
+	case ETMIMPSPEC6:
+		*val = etm_read(ETMIMPSPEC6);
+		return 0;
+	case ETMIMPSPEC7:
+		*val = etm_read(ETMIMPSPEC7);
+		return 0;
+	case ETMSYNCFR:
+		*val = etm_read(ETMSYNCFR);
+		return 0;
+	case ETMIDR:
+		*val = etm_read(ETMIDR);
+		return 0;
+	case ETMCCER:
+		*val = etm_read(ETMCCER);
+		return 0;
+	case ETMEXTINSELR:
+		*val = etm_read(ETMEXTINSELR);
+		return 0;
+	case ETMTESSEICR:
+		*val = etm_read(ETMTESSEICR);
+		return 0;
+	case ETMEIBCR:
+		*val = etm_read(ETMEIBCR);
+		return 0;
+	case ETMTSEVR:
+		*val = etm_read(ETMTSEVR);
+		return 0;
+	case ETMAUXCR:
+		*val = etm_read(ETMAUXCR);
+		return 0;
+	case ETMTRACEIDR:
+		*val = etm_read(ETMTRACEIDR);
+		return 0;
+	case ETMVMIDCVR:
+		*val = etm_read(ETMVMIDCVR);
+		return 0;
+	case ETMOSLSR:
+		*val = etm_read(ETMOSLSR);
+		return 0;
+	case ETMOSSRR:
+		*val = etm_read(ETMOSSRR);
+		return 0;
+	case ETMPDCR:
+		*val = etm_read(ETMPDCR);
+		return 0;
+	case ETMPDSR:
+		*val = etm_read(ETMPDSR);
+		return 0;
+	default:
+		*val = 0;
+		return -EINVAL;
 	}
 }
 
-static void etm_write_reg(uint32_t val, uint32_t reg)
+int etm_writel_cp14(u32 reg, u32 val)
 {
 	switch (reg) {
-	case 0x0:
+	case ETMCR:
 		etm_write(val, ETMCR);
-		return;
-	case 0x2:
+		break;
+	case ETMTRIGGER:
 		etm_write(val, ETMTRIGGER);
-		return;
-	case 0x4:
+		break;
+	case ETMSR:
 		etm_write(val, ETMSR);
-		return;
-	case 0x6:
+		break;
+	case ETMTSSCR:
 		etm_write(val, ETMTSSCR);
-		return;
-	case 0x8:
+		break;
+	case ETMTEEVR:
 		etm_write(val, ETMTEEVR);
-		return;
-	case 0x9:
+		break;
+	case ETMTECR1:
 		etm_write(val, ETMTECR1);
-		return;
-	case 0xB:
+		break;
+	case ETMFFLR:
 		etm_write(val, ETMFFLR);
-		return;
-	case 0x10:
+		break;
+	case ETMACVRn(0):
 		etm_write(val, ETMACVR0);
-		return;
-	case 0x11:
+		break;
+	case ETMACVRn(1):
 		etm_write(val, ETMACVR1);
-		return;
-	case 0x12:
+		break;
+	case ETMACVRn(2):
 		etm_write(val, ETMACVR2);
-		return;
-	case 0x13:
+		break;
+	case ETMACVRn(3):
 		etm_write(val, ETMACVR3);
-		return;
-	case 0x14:
+		break;
+	case ETMACVRn(4):
 		etm_write(val, ETMACVR4);
-		return;
-	case 0x15:
+		break;
+	case ETMACVRn(5):
 		etm_write(val, ETMACVR5);
-		return;
-	case 0x16:
+		break;
+	case ETMACVRn(6):
 		etm_write(val, ETMACVR6);
-		return;
-	case 0x17:
+		break;
+	case ETMACVRn(7):
 		etm_write(val, ETMACVR7);
-		return;
-	case 0x18:
+		break;
+	case ETMACVRn(8):
 		etm_write(val, ETMACVR8);
-		return;
-	case 0x19:
+		break;
+	case ETMACVRn(9):
 		etm_write(val, ETMACVR9);
-		return;
-	case 0x1A:
+		break;
+	case ETMACVRn(10):
 		etm_write(val, ETMACVR10);
-		return;
-	case 0x1B:
+		break;
+	case ETMACVRn(11):
 		etm_write(val, ETMACVR11);
-		return;
-	case 0x1C:
+		break;
+	case ETMACVRn(12):
 		etm_write(val, ETMACVR12);
-		return;
-	case 0x1D:
+		break;
+	case ETMACVRn(13):
 		etm_write(val, ETMACVR13);
-		return;
-	case 0x1E:
+		break;
+	case ETMACVRn(14):
 		etm_write(val, ETMACVR14);
-		return;
-	case 0x1F:
+		break;
+	case ETMACVRn(15):
 		etm_write(val, ETMACVR15);
-		return;
-	case 0x20:
+		break;
+	case ETMACTRn(0):
 		etm_write(val, ETMACTR0);
-		return;
-	case 0x21:
+		break;
+	case ETMACTRn(1):
 		etm_write(val, ETMACTR1);
-		return;
-	case 0x22:
+		break;
+	case ETMACTRn(2):
 		etm_write(val, ETMACTR2);
-		return;
-	case 0x23:
+		break;
+	case ETMACTRn(3):
 		etm_write(val, ETMACTR3);
-		return;
-	case 0x24:
+		break;
+	case ETMACTRn(4):
 		etm_write(val, ETMACTR4);
-		return;
-	case 0x25:
+		break;
+	case ETMACTRn(5):
 		etm_write(val, ETMACTR5);
-		return;
-	case 0x26:
+		break;
+	case ETMACTRn(6):
 		etm_write(val, ETMACTR6);
-		return;
-	case 0x27:
+		break;
+	case ETMACTRn(7):
 		etm_write(val, ETMACTR7);
-		return;
-	case 0x28:
+		break;
+	case ETMACTRn(8):
 		etm_write(val, ETMACTR8);
-		return;
-	case 0x29:
+		break;
+	case ETMACTRn(9):
 		etm_write(val, ETMACTR9);
-		return;
-	case 0x2A:
+		break;
+	case ETMACTRn(10):
 		etm_write(val, ETMACTR10);
-		return;
-	case 0x2B:
+		break;
+	case ETMACTRn(11):
 		etm_write(val, ETMACTR11);
-		return;
-	case 0x2C:
+		break;
+	case ETMACTRn(12):
 		etm_write(val, ETMACTR12);
-		return;
-	case 0x2D:
+		break;
+	case ETMACTRn(13):
 		etm_write(val, ETMACTR13);
-		return;
-	case 0x2E:
+		break;
+	case ETMACTRn(14):
 		etm_write(val, ETMACTR14);
-		return;
-	case 0x2F:
+		break;
+	case ETMACTRn(15):
 		etm_write(val, ETMACTR15);
-		return;
-	case 0x50:
+		break;
+	case ETMCNTRLDVRn(0):
 		etm_write(val, ETMCNTRLDVR0);
-		return;
-	case 0x51:
+		break;
+	case ETMCNTRLDVRn(1):
 		etm_write(val, ETMCNTRLDVR1);
-		return;
-	case 0x52:
+		break;
+	case ETMCNTRLDVRn(2):
 		etm_write(val, ETMCNTRLDVR2);
-		return;
-	case 0x53:
+		break;
+	case ETMCNTRLDVRn(3):
 		etm_write(val, ETMCNTRLDVR3);
-		return;
-	case 0x54:
+		break;
+	case ETMCNTENRn(0):
 		etm_write(val, ETMCNTENR0);
-		return;
-	case 0x55:
+		break;
+	case ETMCNTENRn(1):
 		etm_write(val, ETMCNTENR1);
-		return;
-	case 0x56:
+		break;
+	case ETMCNTENRn(2):
 		etm_write(val, ETMCNTENR2);
-		return;
-	case 0x57:
+		break;
+	case ETMCNTENRn(3):
 		etm_write(val, ETMCNTENR3);
-		return;
-	case 0x58:
+		break;
+	case ETMCNTRLDEVRn(0):
 		etm_write(val, ETMCNTRLDEVR0);
-		return;
-	case 0x59:
+		break;
+	case ETMCNTRLDEVRn(1):
 		etm_write(val, ETMCNTRLDEVR1);
-		return;
-	case 0x5A:
+		break;
+	case ETMCNTRLDEVRn(2):
 		etm_write(val, ETMCNTRLDEVR2);
-		return;
-	case 0x5B:
+		break;
+	case ETMCNTRLDEVRn(3):
 		etm_write(val, ETMCNTRLDEVR3);
-		return;
-	case 0x5C:
+		break;
+	case ETMCNTVRn(0):
 		etm_write(val, ETMCNTVR0);
-		return;
-	case 0x5D:
+		break;
+	case ETMCNTVRn(1):
 		etm_write(val, ETMCNTVR1);
-		return;
-	case 0x5E:
+		break;
+	case ETMCNTVRn(2):
 		etm_write(val, ETMCNTVR2);
-		return;
-	case 0x5F:
+		break;
+	case ETMCNTVRn(3):
 		etm_write(val, ETMCNTVR3);
-		return;
-	case 0x60:
+		break;
+	case ETMSQ12EVR:
 		etm_write(val, ETMSQ12EVR);
-		return;
-	case 0x61:
+		break;
+	case ETMSQ21EVR:
 		etm_write(val, ETMSQ21EVR);
-		return;
-	case 0x62:
+		break;
+	case ETMSQ23EVR:
 		etm_write(val, ETMSQ23EVR);
-		return;
-	case 0x63:
+		break;
+	case ETMSQ31EVR:
 		etm_write(val, ETMSQ31EVR);
-		return;
-	case 0x64:
+		break;
+	case ETMSQ32EVR:
 		etm_write(val, ETMSQ32EVR);
-		return;
-	case 0x65:
+		break;
+	case ETMSQ13EVR:
 		etm_write(val, ETMSQ13EVR);
-		return;
-	case 0x67:
+		break;
+	case ETMSQR:
 		etm_write(val, ETMSQR);
-		return;
-	case 0x68:
+		break;
+	case ETMEXTOUTEVRn(0):
 		etm_write(val, ETMEXTOUTEVR0);
-		return;
-	case 0x69:
+		break;
+	case ETMEXTOUTEVRn(1):
 		etm_write(val, ETMEXTOUTEVR1);
-		return;
-	case 0x6A:
+		break;
+	case ETMEXTOUTEVRn(2):
 		etm_write(val, ETMEXTOUTEVR2);
-		return;
-	case 0x6B:
+		break;
+	case ETMEXTOUTEVRn(3):
 		etm_write(val, ETMEXTOUTEVR3);
-		return;
-	case 0x6C:
+		break;
+	case ETMCIDCVRn(0):
 		etm_write(val, ETMCIDCVR0);
-		return;
-	case 0x6D:
+		break;
+	case ETMCIDCVRn(1):
 		etm_write(val, ETMCIDCVR1);
-		return;
-	case 0x6E:
+		break;
+	case ETMCIDCVRn(2):
 		etm_write(val, ETMCIDCVR2);
-		return;
-	case 0x6F:
+		break;
+	case ETMCIDCMR:
 		etm_write(val, ETMCIDCMR);
-		return;
-	case 0x70:
+		break;
+	case ETMIMPSPEC0:
 		etm_write(val, ETMIMPSPEC0);
-		return;
-	case 0x71:
+		break;
+	case ETMIMPSPEC1:
 		etm_write(val, ETMIMPSPEC1);
-		return;
-	case 0x72:
+		break;
+	case ETMIMPSPEC2:
 		etm_write(val, ETMIMPSPEC2);
-		return;
-	case 0x73:
+		break;
+	case ETMIMPSPEC3:
 		etm_write(val, ETMIMPSPEC3);
-		return;
-	case 0x74:
+		break;
+	case ETMIMPSPEC4:
 		etm_write(val, ETMIMPSPEC4);
-		return;
-	case 0x75:
+		break;
+	case ETMIMPSPEC5:
 		etm_write(val, ETMIMPSPEC5);
-		return;
-	case 0x76:
+		break;
+	case ETMIMPSPEC6:
 		etm_write(val, ETMIMPSPEC6);
-		return;
-	case 0x77:
+		break;
+	case ETMIMPSPEC7:
 		etm_write(val, ETMIMPSPEC7);
-		return;
-	case 0x78:
+		break;
+	case ETMSYNCFR:
 		etm_write(val, ETMSYNCFR);
-		return;
-	case 0x7B:
+		break;
+	case ETMEXTINSELR:
 		etm_write(val, ETMEXTINSELR);
-		return;
-	case 0x7C:
+		break;
+	case ETMTESSEICR:
 		etm_write(val, ETMTESSEICR);
-		return;
-	case 0x7D:
+		break;
+	case ETMEIBCR:
 		etm_write(val, ETMEIBCR);
-		return;
-	case 0x7E:
+		break;
+	case ETMTSEVR:
 		etm_write(val, ETMTSEVR);
-		return;
-	case 0x7F:
+		break;
+	case ETMAUXCR:
 		etm_write(val, ETMAUXCR);
-		return;
-	case 0x80:
+		break;
+	case ETMTRACEIDR:
 		etm_write(val, ETMTRACEIDR);
-		return;
-	case 0x90:
+		break;
+	case ETMVMIDCVR:
 		etm_write(val, ETMVMIDCVR);
-		return;
-	case 0xC0:
+		break;
+	case ETMOSLAR:
 		etm_write(val, ETMOSLAR);
-		return;
-	case 0xC2:
+		break;
+	case ETMOSSRR:
 		etm_write(val, ETMOSSRR);
-		return;
-	case 0xC4:
+		break;
+	case ETMPDCR:
 		etm_write(val, ETMPDCR);
-		return;
-	case 0xC5:
+		break;
+	case ETMPDSR:
 		etm_write(val, ETMPDSR);
-		return;
+		break;
 	default:
-		WARN(1, "invalid CP14 access to ETM reg: %lx",
-							(unsigned long)reg);
-		return;
+		return -EINVAL;
 	}
-}
 
-static inline uint32_t offset_to_reg_num(uint32_t off)
-{
-	return off >> 2;
-}
-
-unsigned int etm_readl_cp14(uint32_t off)
-{
-	uint32_t reg = offset_to_reg_num(off);
-	return etm_read_reg(reg);
-}
-
-void etm_writel_cp14(uint32_t val, uint32_t off)
-{
-	uint32_t reg = offset_to_reg_num(off);
-	etm_write_reg(val, reg);
+	return 0;
 }

@@ -74,20 +74,27 @@ kallsyms()
 	info KSYM ${2}
 	local kallsymopt;
 
-	if [ -n "${CONFIG_KALLSYMS_ALL}" ]; then
-		kallsymopt=--all-symbols
+	if [ -n "${CONFIG_HAVE_UNDERSCORE_SYMBOL_PREFIX}" ]; then
+		kallsymopt="${kallsymopt} --symbol-prefix=_"
 	fi
 
-	if [ -n "${CONFIG_KALLSYMS_LINE_LOCATIONS}" ] ; then
-		llsymopt=--ll-symbols
-		llprog="scripts/readelf --debug-dump=line -q ${1}"
+	if [ -n "${CONFIG_KALLSYMS_ALL}" ]; then
+		kallsymopt="${kallsymopt} --all-symbols"
+	fi
+
+	if [ -n "${CONFIG_ARM}" ] && [ -n "${CONFIG_PAGE_OFFSET}" ]; then
+		kallsymopt="${kallsymopt} --page-offset=$CONFIG_PAGE_OFFSET"
+	fi
+
+	if [ -n "${CONFIG_X86_64}" ]; then
+		kallsymopt="${kallsymopt} --absolute-percpu"
 	fi
 
 	local aflags="${KBUILD_AFLAGS} ${KBUILD_AFLAGS_KERNEL}               \
 		      ${NOSTDINC_FLAGS} ${LINUXINCLUDE} ${KBUILD_CPPFLAGS}"
 
-	(${NM} -n ${1} ; $llprog) | \
-		scripts/kallsyms ${kallsymopt} ${llsymopt} | \
+	${NM} -n ${1} | \
+		scripts/kallsyms ${kallsymopt} | \
 		${CC} ${aflags} -c -o ${2} -x assembler-with-cpp -
 }
 
@@ -96,6 +103,11 @@ kallsyms()
 mksysmap()
 {
 	${CONFIG_SHELL} "${srctree}/scripts/mksysmap" ${1} ${2}
+}
+
+sortextable()
+{
+	${objtree}/scripts/sortextable ${1}
 }
 
 # Delete output files in case of error
@@ -127,7 +139,14 @@ if [ "$1" = "clean" ]; then
 fi
 
 # We need access to CONFIG_ symbols
-. ./.config
+case "${KCONFIG_CONFIG}" in
+*/*)
+	. "${KCONFIG_CONFIG}"
+	;;
+*)
+	# Force using a file from the current directory
+	. "./${KCONFIG_CONFIG}"
+esac
 
 #link vmlinux.o
 info LD vmlinux.o
@@ -197,6 +216,11 @@ fi
 info LD vmlinux
 vmlinux_link "${kallsymso}" vmlinux
 
+if [ -n "${CONFIG_BUILDTIME_EXTABLE_SORT}" ]; then
+	info SORTEX vmlinux
+	sortextable vmlinux
+fi
+
 info SYSMAP System.map
 mksysmap vmlinux System.map
 
@@ -206,7 +230,7 @@ if [ -n "${CONFIG_KALLSYMS}" ]; then
 
 	if ! cmp -s System.map .tmp_System.map; then
 		echo >&2 Inconsistent kallsyms data
-		echo >&2 echo Try "make KALLSYMS_EXTRA_PASS=1" as a workaround
+		echo >&2 Try "make KALLSYMS_EXTRA_PASS=1" as a workaround
 		cleanup
 		exit 1
 	fi

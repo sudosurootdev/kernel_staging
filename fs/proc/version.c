@@ -31,11 +31,4 @@ static int __init proc_version_init(void)
 	proc_create("version", 0, NULL, &version_proc_fops);
 	return 0;
 }
-module_init(proc_version_init);
-
-static int __init ccs_show_version(void)
-{
-	printk(KERN_INFO "Hook version: 3.4.35 2013/03/04\n");
-	return 0;
-}
-module_init(ccs_show_version);
+fs_initcall(proc_version_init);
