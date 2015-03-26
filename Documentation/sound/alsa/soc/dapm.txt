@@ -186,14 +186,6 @@ After all the widgets have been defined, they can then be added to the DAPM
 subsystem individually with a call to snd_soc_dapm_new_control().
 
 
-
-Widgets are connected to each other within the codec and machine by audio paths
-(called interconnections). Each interconnection must be defined in order to
-create a map of all audio paths between widgets.
-
-This is easiest with a diagram of the codec (and schematic of the machine audio
-system), as it requires joining widgets together via their audio signal paths.
-=======
 3. Codec/DSP Widget Interconnections
 ====================================
 

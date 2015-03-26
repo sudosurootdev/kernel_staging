@@ -1,6 +1,3 @@
-* OPP Library *
-*=============*
-=======
 Operating Performance Points (OPP) Library
 ==========================================
 
@@ -13,7 +10,6 @@ Contents
 3. OPP Search Functions
 4. OPP Availability Control Functions
 5. OPP Data Retrieval Functions
-=======
 6. Data Structures
 
 1. Introduction
@@ -95,8 +91,6 @@ using RCU read locks. The opp_find_freq_{exact,ceil,floor},
 opp_get_{voltage, freq, opp_count} fall into this category.
 
 opp_{add,enable,disable} are updaters which use mutex and implement it's own
-The SoC implementation calls opp_add function iteratively to add OPPs per
-=======
 RCU locking mechanisms. These functions should *NOT* be called under RCU locks
 and other contexts that prevent blocking functions in RCU or mutex operations
 from working.
@@ -311,33 +305,6 @@ dev_pm_opp_get_opp_count - Retrieve the number of available opps for a device
 		/* Do other things */
 	 }
 
-opp_init_cpufreq_table - cpufreq framework typically is initialized with
-	cpufreq_frequency_table_cpuinfo which is provided with the list of
-	frequencies that are available for operation. This function provides
-	a ready to use conversion routine to translate the OPP layer's internal
-	information about the available frequencies into a format readily
-	providable to cpufreq.
-
-	WARNING: Do not use this function in interrupt context.
-
-	Example:
-	 soc_pm_init()
-	 {
-		/* Do things */
-		r = opp_init_cpufreq_table(dev, &freq_table);
-		if (!r)
-			cpufreq_frequency_table_cpuinfo(policy, freq_table);
-		/* Do other things */
-	 }
-
-	NOTE: This function is available only if CONFIG_CPU_FREQ is enabled in
-	addition to CONFIG_PM as power management feature is required to
-	dynamically scale voltage and frequency in a system.
-
-opp_free_cpufreq_table - Free up the table allocated by opp_init_cpufreq_table
-
-7. Data Structures
-=======
 6. Data Structures
 ==================
 Typically an SoC contains multiple voltage domains which are variable. Each

@@ -36,14 +36,6 @@ or git tree at git://linux-zigbee.git.sourceforge.net/gitroot/linux-zigbee).
 One can use SOCK_RAW for passing raw data towards device xmit function. YMMV.
 
 
-
-Most of IEEE 802.15.4 MLME interfaces are directly mapped on netlink commands.
-See the include/net/nl802154.h header. Our userspace tools package
-(see above) provides CLI configuration utility for radio interfaces and simple
-coordinator for IEEE 802.15.4 networks as an example users of MLME protocol.
-
-
-=======
 Kernel side
 =============
 

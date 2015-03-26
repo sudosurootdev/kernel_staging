@@ -588,11 +588,6 @@ static void print_page_info(struct page *page)
 
 static void slab_bug(struct kmem_cache *s, char *fmt, ...)
 {
-			"=====================================\n");
-	printk(KERN_ERR "BUG %s (%s): %s\n", s->name, print_tainted(), buf);
-	printk(KERN_ERR "----------------------------------------"
-			"-------------------------------------\n\n");
-=======
 	struct va_format vaf;
 	va_list args;
 

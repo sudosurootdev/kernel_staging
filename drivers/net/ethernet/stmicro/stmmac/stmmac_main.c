@@ -2505,29 +2505,6 @@ static struct dentry *stmmac_fs_dir;
 static struct dentry *stmmac_rings_status;
 static struct dentry *stmmac_dma_cap;
 
-	seq_printf(seq, " RX descriptor ring\n");
-	seq_printf(seq, "=======================\n");
-
-	for (i = 0; i < priv->dma_rx_size; i++) {
-		struct tmp_s *x = (struct tmp_s *)(priv->dma_rx + i);
-		seq_printf(seq, "[%d] DES0=0x%x DES1=0x%x BUF1=0x%x BUF2=0x%x",
-			   i, (unsigned int)(x->a),
-			   (unsigned int)((x->a) >> 32), x->b, x->c);
-		seq_printf(seq, "\n");
-	}
-
-	seq_printf(seq, "\n");
-	seq_printf(seq, "=======================\n");
-	seq_printf(seq, "  TX descriptor ring\n");
-	seq_printf(seq, "=======================\n");
-
-	for (i = 0; i < priv->dma_tx_size; i++) {
-		struct tmp_s *x = (struct tmp_s *)(priv->dma_tx + i);
-		seq_printf(seq, "[%d] DES0=0x%x DES1=0x%x BUF1=0x%x BUF2=0x%x",
-			   i, (unsigned int)(x->a),
-			   (unsigned int)((x->a) >> 32), x->b, x->c);
-		seq_printf(seq, "\n");
-=======
 static void sysfs_display_ring(void *head, int size, int extend_desc,
 			       struct seq_file *seq)
 {

@@ -15,24 +15,6 @@ ALC260
 
 ALC262
 ======
-  N/A
-
-ALC269
-======
-  laptop-amic	Laptops with analog-mic input
-  laptop-dmic	Laptops with digital-mic input
-
-ALC662/663/272
-==============
-  asus-mode1	ASUS
-  asus-mode2	ASUS
-  asus-mode3	ASUS
-  asus-mode4	ASUS
-  asus-mode5	ASUS
-  asus-mode6	ASUS
-  asus-mode7	ASUS
-  asus-mode8	ASUS
-=======
   inv-dmic	Inverted internal mic workaround
 
 ALC267/268

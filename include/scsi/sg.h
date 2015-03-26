@@ -4,25 +4,6 @@
 #include <linux/compiler.h>
 
 /*
- A web site for the SG device driver can be found at:
-	http://www.torque.net/sg  [alternatively check the MAINTAINERS file]
- The documentation for the sg version 3 driver can be found at:
- 	http://www.torque.net/sg/p/sg_v3_ho.html
- This is a rendering from DocBook source [change the extension to "sgml"
- or "xml"]. There are renderings in "ps", "pdf", "rtf" and "txt" (soon).
- The SG_IO ioctl is now found in other parts kernel (e.g. the block layer).
- For more information see http://www.torque.net/sg/sg_io.html
-
- The older, version 2 documents discuss the original sg interface in detail:
-	http://www.torque.net/sg/p/scsi-generic.txt
-	http://www.torque.net/sg/p/scsi-generic_long.txt
- Also available: <kernel_source>/Documentation/scsi/scsi-generic.txt
-
- Utility and test programs are available at the sg web site. They are 
- packaged as sg3_utils (for the lk 2.4 and 2.6 series) and sg_utils
- (for the lk 2.2 series).
-*/
-=======
  * History:
  *  Started: Aug 9 by Lawrence Foard (entropy@world.std.com), to allow user
  *   process control of SCSI devices.

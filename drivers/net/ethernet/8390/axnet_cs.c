@@ -104,9 +104,6 @@ static void AX88190_init(struct net_device *dev, int startp);
 static int ax_open(struct net_device *dev);
 static int ax_close(struct net_device *dev);
 static irqreturn_t ax_interrupt(int irq, void *dev_id);
-
-typedef struct axnet_dev_t {
-=======
 static u32 axnet_msg_enable;
 
 /*====================================================================*/

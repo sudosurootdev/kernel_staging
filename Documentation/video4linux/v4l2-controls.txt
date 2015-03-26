@@ -731,16 +731,6 @@ a control of this type whenever the first control belonging to a new control
 class is added.
 
 
-
-Some ideas for future extensions to the spec:
-
-1) Add a V4L2_CTRL_FLAG_HEX to have values shown as hexadecimal instead of
-decimal. Useful for e.g. video_mute_yuv.
-
-2) It is possible to mark in the controls array which controls have been
-successfully written and which failed by for example adding a bit to the
-control ID. Not sure if it is worth the effort, though.
-=======
 Adding Notify Callbacks
 =======================
 

@@ -101,30 +101,6 @@ static	void	dm_check_txrateandretrycount(struct net_device *dev);
 
 /*---------------------Define local function prototype-----------------------*/
 
-//	HW Dynamic mechanism interface.
-//================================================================================
-
-//
-//	Description:
-//		Prepare SW resource for HW dynamic mechanism.
-//
-//	Assumption:
-//		This function is only invoked at driver intialization once.
-//
-//
-extern	void
-init_hal_dm(struct net_device *dev)
-{
-	struct r8192_priv *priv = ieee80211_priv(dev);
-
-	// Undecorated Smoothed Signal Strength, it can utilized to dynamic mechanism.
-	priv->undecorated_smoothed_pwdb = -1;
-
-	//Initial TX Power Control for near/far range , add by amy 2008/05/15, porting from windows code.
-	dm_init_dynamic_txpower(dev);
-	init_rate_adaptive(dev);
-	//dm_initialize_txpower_tracking(dev);
-=======
 /*---------------------Define of Tx Power Control For Near/Far Range --------*/   /*Add by Jacken 2008/02/18 */
 static	void	dm_init_dynamic_txpower(struct net_device *dev);
 static	void	dm_dynamic_txpower(struct net_device *dev);
@@ -709,38 +685,6 @@ static void dm_TXPowerTrackingCallback_ThermalMeter(struct net_device *dev)
 			}
 		}
 		priv->btxpower_trackingInit = TRUE;
-	// this is only for test, should be masked
-	//==========================
-
-	// read and filter out unreasonable value
-	tmpRegA = rtl8192_phy_QueryRFReg(dev, RF90_PATH_A, 0x12, 0x078);	// 0x12: RF Reg[10:7]
-	RT_TRACE(COMP_POWER_TRACKING, "Readback ThermalMeterA = %d \n", tmpRegA);
-	if(tmpRegA < 3 || tmpRegA > 13)
-		return;
-	if(tmpRegA >= 12)	// if over 12, TP will be bad when high temprature
-		tmpRegA = 12;
-	RT_TRACE(COMP_POWER_TRACKING, "Valid ThermalMeterA = %d \n", tmpRegA);
-	priv->ThermalMeter[0] = ThermalMeterVal;	//We use fixed value by Bryant's suggestion
-	priv->ThermalMeter[1] = ThermalMeterVal;	//We use fixed value by Bryant's suggestion
-
-	//Get current RF-A temprature index
-	if(priv->ThermalMeter[0] >= (u8)tmpRegA)	//lower temprature
-	{
-		tmpOFDMindex = tmpCCK20Mindex = 6+(priv->ThermalMeter[0]-(u8)tmpRegA);
-		tmpCCK40Mindex = tmpCCK20Mindex - 6;
-		if(tmpOFDMindex >= OFDM_Table_Length)
-			tmpOFDMindex = OFDM_Table_Length-1;
-		if(tmpCCK20Mindex >= CCK_Table_length)
-			tmpCCK20Mindex = CCK_Table_length-1;
-		if(tmpCCK40Mindex >= CCK_Table_length)
-			tmpCCK40Mindex = CCK_Table_length-1;
-	}
-	else
-	{
-		tmpval = ((u8)tmpRegA - priv->ThermalMeter[0]);
-		if(tmpval >= 6)								// higher temprature
-			tmpOFDMindex = tmpCCK20Mindex = 0;		// max to +6dB
-=======
 		/*pHalData->TXPowercount = 0;*/
 		return;
 	}
@@ -2264,28 +2208,6 @@ void dm_init_edca_turbo(struct net_device *dev)
 	priv->bcurrent_turbo_EDCA = false;
 	priv->ieee80211->bis_any_nonbepkts = false;
 	priv->bis_cur_rdlstate = false;
-	// Check the status for current condition.
-	if(!priv->ieee80211->bis_any_nonbepkts)
-	{
-		curTxOkCnt = priv->stats.txbytesunicast - lastTxOkCnt;
-		curRxOkCnt = priv->stats.rxbytesunicast - lastRxOkCnt;
-		// For RT-AP, we needs to turn it on when Rx>Tx
-		if(curRxOkCnt > 4*curTxOkCnt)
-		{
-			//printk("%s():curRxOkCnt > 4*curTxOkCnt\n");
-			if(!priv->bis_cur_rdlstate || !priv->bcurrent_turbo_EDCA)
-			{
-				write_nic_dword(dev, EDCAPARA_BE, edca_setting_DL[pHTInfo->IOTPeer]);
-				priv->bis_cur_rdlstate = true;
-			}
-		}
-		else
-		{
-
-			//printk("%s():curRxOkCnt < 4*curTxOkCnt\n");
-			if(priv->bis_cur_rdlstate || !priv->bcurrent_turbo_EDCA)
-			{
-=======
 }	/* dm_init_edca_turbo */
 
 static void dm_check_edca_turbo(
@@ -3132,37 +3054,6 @@ static void dm_dynamic_txpower(struct net_device *dev)
 		txlowpower_threshold = TX_POWER_NEAR_FIELD_THRESH_LOW;
 	}
 
-	RT_TRACE(COMP_TXAGC,"priv->undecorated_smoothed_pwdb = %ld \n" , priv->undecorated_smoothed_pwdb);
-
-	if(priv->ieee80211->state == IEEE80211_LINKED)
-	{
-		if(priv->undecorated_smoothed_pwdb >= txhipower_threshhold)
-		{
-			priv->bDynamicTxHighPower = true;
-			priv->bDynamicTxLowPower = false;
-		}
-		else
-		{
-			// high power state check
-			if(priv->undecorated_smoothed_pwdb < txlowpower_threshold && priv->bDynamicTxHighPower == true)
-			{
-				priv->bDynamicTxHighPower = false;
-			}
-			// low power state check
-			if(priv->undecorated_smoothed_pwdb < 35)
-			{
-				priv->bDynamicTxLowPower = true;
-			}
-			else if(priv->undecorated_smoothed_pwdb >= 40)
-			{
-				priv->bDynamicTxLowPower = false;
-			}
-		}
-	}
-	else
-	{
-		//pHalData->bTXPowerCtrlforNearFarRange = !pHalData->bTXPowerCtrlforNearFarRange;
-=======
 	/*printk("=======>%s(): txhipower_threshhold is %d, txlowpower_threshold is %d\n", __func__, txhipower_threshhold, txlowpower_threshold);*/
 	RT_TRACE(COMP_TXAGC, "priv->undecorated_smoothed_pwdb = %ld\n", priv->undecorated_smoothed_pwdb);
 
@@ -3203,13 +3094,6 @@ static void dm_dynamic_txpower(struct net_device *dev)
 
 }	/* dm_dynamic_txpower */
 
-	//for initial tx rate
-//	priv->stats.last_packet_rate = read_nic_byte(dev, Initial_Tx_Rate_Reg);
-	ieee->softmac_stats.last_packet_rate = read_nic_byte(dev ,Initial_Tx_Rate_Reg);
-	//for tx tx retry count
-//	priv->stats.txretrycount = read_nic_dword(dev, Tx_Retry_Count_Reg);
-	ieee->softmac_stats.txretrycount = read_nic_dword(dev, Tx_Retry_Count_Reg);
-=======
 /* added by vivi, for read tx rate and retrycount */
 static void dm_check_txrateandretrycount(struct net_device *dev)
 {

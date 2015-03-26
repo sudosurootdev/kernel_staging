@@ -1,18 +1,3 @@
-$Id: README,v 1.7 2001/04/19 12:38:32 bjornw Exp $
-
-This is a port of Linux 2.4 to Axis Communications ETRAX 100LX embedded 
-network CPU. For more information about CRIS and ETRAX please see further
-below.
-
-In order to compile this you need a version of gcc with support for the
-ETRAX chip family. Please see this link for more information on how to 
-download the compiler and other tools useful when building and booting
-software for the ETRAX platform:
-
-http://developer.axis.com/doc/software/devboard_lx/install-howto.html
-
-<more specific information should come in this document later>
-=======
 Linux on the CRIS architecture
 ==============================
 

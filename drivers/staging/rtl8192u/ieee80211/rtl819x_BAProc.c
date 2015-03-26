@@ -100,10 +100,6 @@ void ResetBaEntry(PBA_RECORD pBA)
 //These functions need porting here or not?
 /*******************************************************************************************************************************
  *function:  construct ADDBAREQ and ADDBARSP frame here together.
-	if (pBA == NULL||ieee == NULL)
-	{
-		IEEE80211_DEBUG(IEEE80211_DL_ERR, "pBA(%p) is NULL or ieee(%p) is NULL\n", pBA, ieee);
-=======
  *   input:  u8*		Dst	//ADDBA frame's destination
  *	     PBA_RECORD		pBA	//BA_RECORD entry which stores the necessary information for BA.
  *	     u16		StatusCode  //status code in RSP and I will use it to indicate whether it's RSP or REQ(will I?)
@@ -205,7 +201,6 @@ static struct sk_buff *ieee80211_DELBA(
 	u16 len = 6 + ieee->tx_headroom;
 
 	if (net_ratelimit())
-=======
 	IEEE80211_DEBUG(IEEE80211_DL_TRACE | IEEE80211_DL_BA, "========>%s(), ReasonCode(%d) sentd to:%pM\n", __func__, ReasonCode, dst);
 
 	memset(&DelbaParamSet, 0, 2);

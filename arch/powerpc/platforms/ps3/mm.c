@@ -223,9 +223,6 @@ void ps3_mm_vas_destroy(void)
 	}
 }
 
-/* memory hotplug routines                                                    */
-/*============================================================================*/
-=======
 static int ps3_mm_get_repository_highmem(struct mem_region *r)
 {
 	int result;

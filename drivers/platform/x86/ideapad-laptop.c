@@ -205,18 +205,6 @@ static int write_ec_cmd(acpi_handle handle, int cmd, unsigned long data)
 /*
  * debugfs
  */
-
-	if (!read_ec_data(ideapad_handle, VPCCMD_R_RF, &value))
-		seq_printf(s, "Radio status:\t%s(%lu)\n",
-			   value ? "On" : "Off", value);
-	if (!read_ec_data(ideapad_handle, VPCCMD_R_WIFI, &value))
-		seq_printf(s, "Wifi status:\t%s(%lu)\n",
-			   value ? "On" : "Off", value);
-	if (!read_ec_data(ideapad_handle, VPCCMD_R_BT, &value))
-		seq_printf(s, "BT status:\t%s(%lu)\n",
-			   value ? "On" : "Off", value);
-	if (!read_ec_data(ideapad_handle, VPCCMD_R_3G, &value))
-=======
 static int debugfs_status_show(struct seq_file *s, void *data)
 {
 	struct ideapad_private *priv = s->private;

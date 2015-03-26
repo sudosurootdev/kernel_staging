@@ -3,11 +3,6 @@
 #
 # header-y  - list files to be installed. They are preprocessed
 #             to remove __KERNEL__ section of the file
-
-# called may set destination dir (when installing to asm/)
-_dst := $(if $(dst),$(dst),$(obj))
-
-=======
 # genhdr-y  - Same as header-y but in a generated/ directory
 #
 # ==========================================================================

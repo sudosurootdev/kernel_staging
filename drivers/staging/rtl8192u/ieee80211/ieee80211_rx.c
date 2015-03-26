@@ -660,11 +660,6 @@ static void RxReorderIndicatePacket(struct ieee80211_device *ieee,
 		IEEE80211_DEBUG(IEEE80211_DL_REORDER, "Packets indication!! IndicateSeq: %d, NewSeq: %d\n",\
 				pTS->RxIndicateSeq, SeqNum);
 		prxbIndicateArray[0] = prxb;
-		index = 1;
-	} else {
-		/* Current packet is going to be inserted into pending list.*/
-		//IEEE80211_DEBUG(IEEE80211_DL_REORDER,"%s(): We RX no ordered packed, insert to orderd list\n",__FUNCTION__);
-=======
 //		printk("========================>%s(): SeqNum is %d\n",__func__,SeqNum);
 		index = 1;
 	} else {
@@ -735,7 +730,6 @@ static void RxReorderIndicatePacket(struct ieee80211_device *ieee,
 
 			IEEE80211_DEBUG(IEEE80211_DL_REORDER,"Packets indication!! IndicateSeq: %d, NewSeq: %d\n",pTS->RxIndicateSeq, SeqNum);
 			prxbIndicateArray[index] = pReorderEntry->prxb;
-=======
 		//	printk("========================>%s(): pReorderEntry->SeqNum is %d\n",__func__,pReorderEntry->SeqNum);
 			index++;
 
@@ -1930,7 +1924,6 @@ int ieee80211_parse_info_param(struct ieee80211_device *ieee,
 				info_element->data[1] == 0x13 &&
 				info_element->data[2] == 0x74))
 			{
-=======
 				printk("========>%s(): athros AP is exist\n",__func__);
 				network->atheros_cap_exist = true;
 			}

@@ -320,13 +320,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp,
 		put_psr(get_psr() | PSR_EF);
 		fpsave(&p->thread.float_regs[0], &p->thread.fsr,
 		       &p->thread.fpqueue[0], &p->thread.fpqdepth);
-	 */
-	new_stack = task_stack_page(p) + THREAD_SIZE;
-	if (regs->psr & PSR_PS)
-		new_stack -= STACKFRAME_SZ;
-	new_stack -= STACKFRAME_SZ + TRACEREG_SZ;
-	memcpy(new_stack, (char *)regs - STACKFRAME_SZ, STACKFRAME_SZ + TRACEREG_SZ);
-=======
 	}
 
 	/*

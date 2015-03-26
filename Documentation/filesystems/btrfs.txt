@@ -34,7 +34,6 @@ The main Btrfs features include:
     * Online filesystem defragmentation
 
 
-=======
 Mount Options
 =============
 

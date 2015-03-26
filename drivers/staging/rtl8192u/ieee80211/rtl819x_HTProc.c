@@ -1131,7 +1131,6 @@ void HTInitializeHTInfo(struct ieee80211_device *ieee)
 	//
 	// These parameters will be reset when receiving deauthentication packet
 	//
-=======
 	IEEE80211_DEBUG(IEEE80211_DL_HT, "===========>%s()\n", __func__);
 	pHTInfo->bCurrentHTSupport = false;
 
@@ -1227,7 +1226,6 @@ void HTResetSelfAndSavePeerSetting(struct ieee80211_device *ieee,	struct ieee802
 	//
 	//  Save Peer Setting before Association
 	//
-=======
 	IEEE80211_DEBUG(IEEE80211_DL_HT, "==============>%s()\n", __func__);
 	/*unmark bEnableHT flag here is the same reason why unmarked in function ieee80211_softmac_new_net. WB 2008.09.10*/
 //	if( pHTInfo->bEnableHT &&  pNetwork->bssht.bdSupportHT)

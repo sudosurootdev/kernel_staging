@@ -250,7 +250,6 @@ int zlib_deflateInit2(
 }
 
 /* ========================================================================= */
-=======
 int zlib_deflateReset(
 	z_streamp strm
 )
@@ -281,45 +280,6 @@ int zlib_deflateReset(
     return Z_OK;
 }
 
-#if 0
-int zlib_deflateParams(
-	z_streamp strm,
-	int level,
-	int strategy
-)
-{
-    deflate_state *s;
-    compress_func func;
-    int err = Z_OK;
-
-    if (strm == NULL || strm->state == NULL) return Z_STREAM_ERROR;
-    s = (deflate_state *) strm->state;
-
-    if (level == Z_DEFAULT_COMPRESSION) {
-	level = 6;
-    }
-    if (level < 0 || level > 9 || strategy < 0 || strategy > Z_HUFFMAN_ONLY) {
-	return Z_STREAM_ERROR;
-    }
-    func = configuration_table[s->level].func;
-
-    if (func != configuration_table[level].func && strm->total_in != 0) {
-	/* Flush the last buffer: */
-	err = zlib_deflate(strm, Z_PARTIAL_FLUSH);
-    }
-    if (s->level != level) {
-	s->level = level;
-	s->max_lazy_match   = configuration_table[level].max_lazy;
-	s->good_match       = configuration_table[level].good_length;
-	s->nice_match       = configuration_table[level].nice_length;
-	s->max_chain_length = configuration_table[level].max_chain;
-    }
-    s->strategy = strategy;
-    return err;
-}
-#endif  /*  0  */
-
-=======
 /* =========================================================================
  * Put a short in the pending buffer. The 16-bit value is put in MSB order.
  * IN assertion: the stream state is correct and there is enough room in
@@ -523,64 +483,6 @@ int zlib_deflateEnd(
     return status == BUSY_STATE ? Z_DATA_ERROR : Z_OK;
 }
 
- * Copy the source state to the destination state.
- */
-#if 0
-int zlib_deflateCopy (
-	z_streamp dest,
-	z_streamp source
-)
-{
-#ifdef MAXSEG_64K
-    return Z_STREAM_ERROR;
-#else
-    deflate_state *ds;
-    deflate_state *ss;
-    ush *overlay;
-    deflate_workspace *mem;
-
-
-    if (source == NULL || dest == NULL || source->state == NULL) {
-        return Z_STREAM_ERROR;
-    }
-
-    ss = (deflate_state *) source->state;
-
-    *dest = *source;
-
-    mem = (deflate_workspace *) dest->workspace;
-
-    ds = &(mem->deflate_memory);
-
-    dest->state = (struct internal_state *) ds;
-    *ds = *ss;
-    ds->strm = dest;
-
-    ds->window = (Byte *) mem->window_memory;
-    ds->prev   = (Pos *)  mem->prev_memory;
-    ds->head   = (Pos *)  mem->head_memory;
-    overlay = (ush *) mem->overlay_memory;
-    ds->pending_buf = (uch *) overlay;
-
-    memcpy(ds->window, ss->window, ds->w_size * 2 * sizeof(Byte));
-    memcpy(ds->prev, ss->prev, ds->w_size * sizeof(Pos));
-    memcpy(ds->head, ss->head, ds->hash_size * sizeof(Pos));
-    memcpy(ds->pending_buf, ss->pending_buf, (uInt)ds->pending_buf_size);
-
-    ds->pending_out = ds->pending_buf + (ss->pending_out - ss->pending_buf);
-    ds->d_buf = overlay + ds->lit_bufsize/sizeof(ush);
-    ds->l_buf = ds->pending_buf + (1+sizeof(ush))*ds->lit_bufsize;
-
-    ds->l_desc.dyn_tree = ds->dyn_ltree;
-    ds->d_desc.dyn_tree = ds->dyn_dtree;
-    ds->bl_desc.dyn_tree = ds->bl_tree;
-
-    return Z_OK;
-#endif
-}
-#endif  /*  0  */
-
-=======
 /* ===========================================================================
  * Read a new buffer from the current input stream, update the adler32
  * and total number of bytes read.  All deflate() input goes through

@@ -62,16 +62,6 @@ Under below explanation, we assume CONFIG_MEM_RES_CTRL_SWAP=y.
 	(b) If the SwapCache has been mapped by processes, it has been
 	    charged already.
 
-          (3)        +1/+1    +1/+1     +1/+1   +1/+1
-          (4)          -       0/ 0       -     -1/ 0
-          (5)         0/-1     0/ 0     -1/-1    0/ 0
-          (6)          -       0/-1       -      0/-1
-          ===========================================
-       Result         1/ 1     1/ 1      1/ 1    1/ 1
-
-       In any cases, charges to this page should be 1/ 1.
-
-=======
 	4.2 Swap-out.
 	At swap-out, typical state transition is below.
 

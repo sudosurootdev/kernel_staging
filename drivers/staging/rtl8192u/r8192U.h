@@ -505,8 +505,6 @@ typedef struct _rt_firmware_info_819xUsb {
 #define RSVD_FW_QUEUE_PAGE_CMD_SHIFT	0x08
 #define RSVD_FW_QUEUE_PAGE_BCN_SHIFT	0x00
 #define RSVD_FW_QUEUE_PAGE_PUB_SHIFT	0x08
-//=================================================================
-=======
 
 /*
  * =================================================================
@@ -842,18 +840,6 @@ typedef enum _RT_CUSTOMER_ID {
 	RT_CID_Nettronix = 11,
 	RT_CID_DLINK = 12,
 	RT_CID_PRONET = 13,
-// LED customization.
-//================================================================================
-
-typedef	enum _LED_STRATEGY_8190{
-	SW_LED_MODE0, // SW control 1 LED via GPIO0. It is default option.
-	SW_LED_MODE1, // SW control for PCI Express
-	SW_LED_MODE2, // SW control for Cameo.
-	SW_LED_MODE3, // SW contorl for RunTop.
-	SW_LED_MODE4, // SW control for Netcore
-	HW_LED, // HW control 2 LEDs, LED0 and LED1 (there are 4 different control modes)
-}LED_STRATEGY_8190, *PLED_STRATEGY_8190;
-=======
 } RT_CUSTOMER_ID, *PRT_CUSTOMER_ID;
 
 /*

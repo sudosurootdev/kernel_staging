@@ -137,7 +137,6 @@ available for writes where the two data bytes are the other way
 around (not SMBus compliant, but very popular.)
 
 
-=======
 SMBus Process Call:
 ===================
 
@@ -258,13 +257,6 @@ designated register that is specified through the Comm byte.
 S Addr Wr [A] Comm [A] 
            S Addr Rd [A] [Data] A [Data] A ... A [Data] NA P
 
-
-This command reads a block of bytes from a device, from a 
-designated register that is specified through the two Comm bytes.
-
-S Addr Wr [A] Comm1 [A] Comm2 [A] 
-           S Addr Rd [A] [Data] A [Data] A ... A [Data] NA P
-=======
 Functionality flag: I2C_FUNC_SMBUS_READ_I2C_BLOCK
 
 

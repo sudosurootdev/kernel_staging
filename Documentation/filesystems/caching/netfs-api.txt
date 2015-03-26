@@ -712,9 +712,6 @@ written to the cache and for the cache to finish with the page generally.  No
 error is returned.
 
 
-INDEX AND DATA FILE UPDATE
-==========================
-=======
 ===============================
 INDEX AND DATA FILE CONSISTENCY
 ===============================
@@ -843,13 +840,6 @@ the cookies for "child" indices, objects and pages have been relinquished
 first.
 
 
-INDEX AND DATA FILE INVALIDATION
-================================
-
-There is no direct way to invalidate an index subtree or a data file.  To do
-this, the caller should relinquish and retire the cookie they have, and then
-acquire a new one.
-=======
 ==================
 INDEX INVALIDATION
 ==================

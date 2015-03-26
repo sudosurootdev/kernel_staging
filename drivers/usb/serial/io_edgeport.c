@@ -1838,7 +1838,6 @@ static void process_rcvd_status(struct edgeport_serial *edge_serial,
 			return;
 
 		case IOSP_EXT_STATUS_RX_CHECK_RSP:
-=======
 			dev_dbg(dev, "%s ========== Port %u CHECK_RSP Sequence = %02x =============\n",
 				__func__, edge_serial->rxPort, byte3);
 			/* Port->RxCheckRsp = true; */

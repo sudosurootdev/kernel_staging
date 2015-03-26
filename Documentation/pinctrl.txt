@@ -1165,7 +1165,6 @@ all get selected, and they all get enabled and disable simultaneously by the
 pinmux core.
 
 
-=======
 Pin control requests from drivers
 =================================
 

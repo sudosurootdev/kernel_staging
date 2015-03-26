@@ -71,7 +71,6 @@ static void backtrace_test_saved(void)
 
 static int backtrace_regression_test(void)
 {
-=======
 	pr_info("====[ backtrace testing ]===========\n");
 
 	backtrace_test_normal();

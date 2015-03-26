@@ -3490,58 +3490,6 @@ Currently Allocated CCBs:	%d\n", adapter->drvr_qdepth, adapter->alloc_ccbs);
 \n\
 Target	Tagged Queuing	Queue Depth  Active  Attempted	Completed\n\
 ======	==============	===========  ======  =========	=========\n");
-	for (TargetID = 0; TargetID < HostAdapter->MaxTargetDevices; TargetID++) {
-		struct BusLogic_TargetFlags *TargetFlags = &HostAdapter->TargetFlags[TargetID];
-		if (!TargetFlags->TargetExists)
-			continue;
-		Length += sprintf(&Buffer[Length], "  %2d	  %9u	 %9u", TargetID, TargetStatistics[TargetID].ReadCommands, TargetStatistics[TargetID].WriteCommands);
-		if (TargetStatistics[TargetID].TotalBytesRead.Billions > 0)
-			Length += sprintf(&Buffer[Length], "     %9u%09u", TargetStatistics[TargetID].TotalBytesRead.Billions, TargetStatistics[TargetID].TotalBytesRead.Units);
-		else
-			Length += sprintf(&Buffer[Length], "		%9u", TargetStatistics[TargetID].TotalBytesRead.Units);
-		if (TargetStatistics[TargetID].TotalBytesWritten.Billions > 0)
-			Length += sprintf(&Buffer[Length], "   %9u%09u\n", TargetStatistics[TargetID].TotalBytesWritten.Billions, TargetStatistics[TargetID].TotalBytesWritten.Units);
-		else
-			Length += sprintf(&Buffer[Length], "	     %9u\n", TargetStatistics[TargetID].TotalBytesWritten.Units);
-	}
-	Length += sprintf(&Buffer[Length], "\n\
-Target  Command    0-1KB      1-2KB      2-4KB      4-8KB     8-16KB\n\
-======  =======  =========  =========  =========  =========  =========\n");
-	for (TargetID = 0; TargetID < HostAdapter->MaxTargetDevices; TargetID++) {
-		struct BusLogic_TargetFlags *TargetFlags = &HostAdapter->TargetFlags[TargetID];
-		if (!TargetFlags->TargetExists)
-			continue;
-		Length +=
-		    sprintf(&Buffer[Length],
-			    "  %2d	 Read	 %9u  %9u  %9u  %9u  %9u\n", TargetID,
-			    TargetStatistics[TargetID].ReadCommandSizeBuckets[0],
-			    TargetStatistics[TargetID].ReadCommandSizeBuckets[1], TargetStatistics[TargetID].ReadCommandSizeBuckets[2], TargetStatistics[TargetID].ReadCommandSizeBuckets[3], TargetStatistics[TargetID].ReadCommandSizeBuckets[4]);
-		Length +=
-		    sprintf(&Buffer[Length],
-			    "  %2d	 Write	 %9u  %9u  %9u  %9u  %9u\n", TargetID,
-			    TargetStatistics[TargetID].WriteCommandSizeBuckets[0],
-			    TargetStatistics[TargetID].WriteCommandSizeBuckets[1], TargetStatistics[TargetID].WriteCommandSizeBuckets[2], TargetStatistics[TargetID].WriteCommandSizeBuckets[3], TargetStatistics[TargetID].WriteCommandSizeBuckets[4]);
-	}
-	Length += sprintf(&Buffer[Length], "\n\
-Target  Command   16-32KB    32-64KB   64-128KB   128-256KB   256KB+\n\
-======  =======  =========  =========  =========  =========  =========\n");
-	for (TargetID = 0; TargetID < HostAdapter->MaxTargetDevices; TargetID++) {
-		struct BusLogic_TargetFlags *TargetFlags = &HostAdapter->TargetFlags[TargetID];
-		if (!TargetFlags->TargetExists)
-			continue;
-		Length +=
-		    sprintf(&Buffer[Length],
-			    "  %2d	 Read	 %9u  %9u  %9u  %9u  %9u\n", TargetID,
-			    TargetStatistics[TargetID].ReadCommandSizeBuckets[5],
-			    TargetStatistics[TargetID].ReadCommandSizeBuckets[6], TargetStatistics[TargetID].ReadCommandSizeBuckets[7], TargetStatistics[TargetID].ReadCommandSizeBuckets[8], TargetStatistics[TargetID].ReadCommandSizeBuckets[9]);
-		Length +=
-		    sprintf(&Buffer[Length],
-			    "  %2d	 Write	 %9u  %9u  %9u  %9u  %9u\n", TargetID,
-			    TargetStatistics[TargetID].WriteCommandSizeBuckets[5],
-			    TargetStatistics[TargetID].WriteCommandSizeBuckets[6], TargetStatistics[TargetID].WriteCommandSizeBuckets[7], TargetStatistics[TargetID].WriteCommandSizeBuckets[8], TargetStatistics[TargetID].WriteCommandSizeBuckets[9]);
-	}
-	Length += sprintf(&Buffer[Length], "\n\n\
-=======
 	for (tgt = 0; tgt < adapter->maxdev; tgt++) {
 		struct blogic_tgt_flags *tgt_flags = &adapter->tgt_flags[tgt];
 		if (!tgt_flags->tgt_exists)

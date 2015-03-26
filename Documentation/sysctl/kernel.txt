@@ -155,8 +155,6 @@ Documentation/x86/boot.txt for additional information.
 
 ==============================================================
 
-
-=======
 callhome:
 
 Controls the kernel's callhome behavior in case of a kernel panic.
@@ -177,16 +175,6 @@ cap_last_cap
 Highest valid capability of the running kernel.  Exports
 CAP_LAST_CAP from the kernel.
 
-
-cold_boot
-
-ARM -- indicator for system cold boot
-
-A single bit will be set in the unsigned integer value to identify
-whether the device was booted from a cold or warm state. Zero
-indicating a warm boot and one indicating a cold boot.
-
-=======
 ==============================================================
 
 core_pattern:
@@ -578,17 +566,6 @@ the existing panic controls already in that directory.
 
 ==============================================================
 
-
-panic_on_stackoverflow:
-
-Controls the kernel's behavior when detecting the overflows of
-kernel, IRQ and exception stacks except a user stack.
-This file shows up if CONFIG_DEBUG_STACKOVERFLOW is enabled.
-
-0: try to continue operation.
-
-1: panic immediately.
-=======
 panic_on_warn:
 
 Calls panic() in the WARN() path when set to 1.  This is useful to avoid

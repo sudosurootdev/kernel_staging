@@ -38,7 +38,6 @@ static void RxPktPendingTimeout(unsigned long data)
 
 	spin_lock_irqsave(&(ieee->reorder_spinlock), flags);
 	//PlatformAcquireSpinLock(Adapter, RT_RX_SPINLOCK);
-=======
 	IEEE80211_DEBUG(IEEE80211_DL_REORDER,"==================>%s()\n",__func__);
 	if(pRxTs->RxTimeoutIndicateSeq != 0xffff)
 	{
@@ -145,7 +144,6 @@ void TSInitialize(struct ieee80211_device *ieee)
 	PRX_TS_RECORD		pRxTS  = ieee->RxTsRecord;
 	PRX_REORDER_ENTRY	pRxReorderEntry = ieee->RxReorderEntry;
 	u8				count = 0;
-=======
 	IEEE80211_DEBUG(IEEE80211_DL_TS, "==========>%s()\n", __func__);
 	// Initialize Tx TS related info.
 	INIT_LIST_HEAD(&ieee->Tx_TS_Admit_List);

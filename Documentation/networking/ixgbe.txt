@@ -1,7 +1,3 @@
-
-Intel Gigabit Linux driver.
-Copyright(c) 1999 - 2010 Intel Corporation.
-=======
 Linux* Base Driver for the Intel(R) Ethernet 10 Gigabit PCI Express Family of
 Adapters
 =============================================================================

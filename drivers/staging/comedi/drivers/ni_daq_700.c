@@ -15,59 +15,6 @@
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
-
-static const struct pcmcia_device_id dio700_cs_ids[] = {
-	/* N.B. These IDs should match those in dio700_boards */
-	PCMCIA_DEVICE_MANF_CARD(0x010b, 0x4743),	/* daqcard-700 */
-	PCMCIA_DEVICE_NULL
-};
-
-
-MODULE_DEVICE_TABLE(pcmcia, dio700_cs_ids);
-MODULE_AUTHOR("Fred Brooks <nsaspook@nsaspook.com>");
-MODULE_DESCRIPTION("Comedi driver for National Instruments "
-		   "PCMCIA DAQCard-700 DIO");
-MODULE_LICENSE("GPL");
-
-struct pcmcia_driver dio700_cs_driver = {
-	.probe = dio700_cs_attach,
-	.remove = dio700_cs_detach,
-	.suspend = dio700_cs_suspend,
-	.resume = dio700_cs_resume,
-	.id_table = dio700_cs_ids,
-	.owner = THIS_MODULE,
-	.name = "ni_daq_700",
-};
-
-static int __init init_dio700_cs(void)
-{
-	pcmcia_register_driver(&dio700_cs_driver);
-	return 0;
-}
-
-static void __exit exit_dio700_cs(void)
-{
-	pr_debug("ni_daq_700: unloading\n");
-	pcmcia_unregister_driver(&dio700_cs_driver);
-}
-
-int __init init_module(void)
-{
-	int ret;
-
-	ret = init_dio700_cs();
-	if (ret < 0)
-		return ret;
-
-	return comedi_driver_register(&driver_dio700);
-}
-
-void __exit cleanup_module(void)
-{
-	exit_dio700_cs();
-	comedi_driver_unregister(&driver_dio700);
-}
-=======
  */
 
 /*

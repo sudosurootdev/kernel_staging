@@ -203,18 +203,6 @@ The flags specification comprises a change operation followed
 by one or more flag characters.  The change operation is one
 of the characters:
 
-
-To be able to activate debug messages during the boot process,
-even before userspace and debugfs exists, use the boot parameter:
-ddebug_query="QUERY"
-
-QUERY follows the syntax described above, but must not exceed 1023
-characters. The enablement of debug messages is done as an arch_initcall.
-Thus you can enable debug messages in all code processed after this
-arch_initcall via this boot parameter.
-On an x86 system for example ACPI enablement is a subsys_initcall and
-ddebug_query="file ec.c +p"
-=======
   -    remove the given flags
   +    add the given flags
   =    set the flags to the given flags

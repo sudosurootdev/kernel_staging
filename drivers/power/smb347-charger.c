@@ -1138,51 +1138,6 @@ static enum power_supply_property smb347_battery_properties[] = {
 	POWER_SUPPLY_PROP_MODEL_NAME,
 };
 
-	for (reg = CFG_CHARGE_CURRENT; reg <= CFG_ADDRESS; reg++) {
-		ret = smb347_read(smb, reg);
-		seq_printf(s, "0x%02x:\t0x%02x\n", reg, ret);
-	}
-	seq_printf(s, "\n");
-
-	seq_printf(s, "Command registers:\n");
-	seq_printf(s, "==================\n");
-	ret = smb347_read(smb, CMD_A);
-	seq_printf(s, "0x%02x:\t0x%02x\n", CMD_A, ret);
-	ret = smb347_read(smb, CMD_B);
-	seq_printf(s, "0x%02x:\t0x%02x\n", CMD_B, ret);
-	ret = smb347_read(smb, CMD_C);
-	seq_printf(s, "0x%02x:\t0x%02x\n", CMD_C, ret);
-	seq_printf(s, "\n");
-
-	seq_printf(s, "Interrupt status registers:\n");
-	seq_printf(s, "===========================\n");
-	for (reg = IRQSTAT_A; reg <= IRQSTAT_F; reg++) {
-		ret = smb347_read(smb, reg);
-		seq_printf(s, "0x%02x:\t0x%02x\n", reg, ret);
-	}
-	seq_printf(s, "\n");
-
-	seq_printf(s, "Status registers:\n");
-	seq_printf(s, "=================\n");
-	for (reg = STAT_A; reg <= STAT_E; reg++) {
-		ret = smb347_read(smb, reg);
-		seq_printf(s, "0x%02x:\t0x%02x\n", reg, ret);
-	}
-
-	return 0;
-}
-
-static int smb347_debugfs_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, smb347_debugfs_show, inode->i_private);
-}
-
-static const struct file_operations smb347_debugfs_fops = {
-	.open		= smb347_debugfs_open,
-	.read		= seq_read,
-	.llseek		= seq_lseek,
-	.release	= single_release,
-=======
 static bool smb347_volatile_reg(struct device *dev, unsigned int reg)
 {
 	switch (reg) {

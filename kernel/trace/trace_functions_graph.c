@@ -646,25 +646,6 @@ static void print_graph_abs_time(u64 t, struct trace_seq *s)
 	usecs_rem = do_div(t, NSEC_PER_SEC);
 	usecs_rem /= 1000;
 
-	else
-		ret = trace_seq_printf(s, "<==========");
-
-	if (!ret)
-		return TRACE_TYPE_PARTIAL_LINE;
-
-	ret = print_graph_duration(DURATION_FILL_END, s, flags);
-	if (ret != TRACE_TYPE_HANDLED)
-		return ret;
-
-	ret = trace_seq_printf(s, "\n");
-
-	if (!ret)
-		return TRACE_TYPE_PARTIAL_LINE;
-	return TRACE_TYPE_HANDLED;
-}
-
-enum print_line_t
-=======
 	trace_seq_printf(s, "%5lu.%06lu |  ",
 			 (unsigned long)t, usecs_rem);
 }

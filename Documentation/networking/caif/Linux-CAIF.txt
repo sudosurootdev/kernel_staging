@@ -48,7 +48,6 @@ The implementation of CAIF is divided into:
 
 I M P L E M E N T A T I O N
 ===========================
-=======
 
 
 CAIF Core Protocol Layer
@@ -154,10 +153,6 @@ In this layered approach the following "rules" apply.
 		 layer->dn->transmit(layer->dn, packet);
 
 
-
-Linux GPRS Net Device and CAIF socket are implemented on top of the
-CAIF Core protocol. The Net device and CAIF socket have an instance of
-=======
 CAIF Socket and IP interface
 ===========================
 

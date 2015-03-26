@@ -81,29 +81,6 @@ static int das08_cs_auto_attach(struct comedi_device *dev,
 	return das08_common_attach(dev, iobase);
 }
 
-
-    The following pcmcia code for the pcm-das08 is adapted from the
-    dummy_cs.c driver of the Linux PCMCIA Card Services package.
-
-    The initial developer of the original code is David A. Hinds
-    <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
-    are Copyright (C) 1999 David A. Hinds.  All Rights Reserved.
-
-======================================================================*/
-
-static void das08_pcmcia_config(struct pcmcia_device *link);
-static void das08_pcmcia_release(struct pcmcia_device *link);
-static int das08_pcmcia_suspend(struct pcmcia_device *p_dev);
-static int das08_pcmcia_resume(struct pcmcia_device *p_dev);
-
-static int das08_pcmcia_attach(struct pcmcia_device *);
-static void das08_pcmcia_detach(struct pcmcia_device *);
-
-struct local_info_t {
-	struct pcmcia_device *link;
-	int stop;
-	struct bus_operations *bus;
-=======
 static struct comedi_driver driver_das08_cs = {
 	.driver_name	= "das08_cs",
 	.module		= THIS_MODULE,
@@ -113,8 +90,6 @@ static struct comedi_driver driver_das08_cs = {
 
 static int das08_pcmcia_attach(struct pcmcia_device *link)
 {
-
-=======
 	return comedi_pcmcia_auto_config(link, &driver_das08_cs);
 }
 

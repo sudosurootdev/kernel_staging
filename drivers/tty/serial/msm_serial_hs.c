@@ -367,21 +367,6 @@ static struct workqueue_struct *msm_hs_workqueue;
 #define UARTDM_TO_MSM(uart_port) \
 	container_of((uart_port), struct msm_hs_port, uport)
 
-	MSM_HS_DBG("UART_DM_MR1:%x\n", msm_hs_read(&(msm_uport->uport),
-		UART_DM_MR1));
-	MSM_HS_DBG("UART_DM_MR2:%x\n", msm_hs_read(&(msm_uport->uport),
-		UART_DM_MR2));
-	MSM_HS_DBG("UART_DM_IPR:%x\n", msm_hs_read(&(msm_uport->uport),
-		UART_DM_IPR));
-	MSM_HS_DBG("UART_DM_RFWR:%x\n", msm_hs_read(&(msm_uport->uport),
-		UART_DM_RFWR));
-	MSM_HS_DBG("UART_DM_SR:%x\n", msm_hs_read(&(msm_uport->uport),
-		UART_DM_SR));
-	MSM_HS_DBG("UART_DM_IMR: %x\n", msm_hs_read(&(msm_uport->uport),
-		UART_DM_IMR));
-	MSM_HS_DBG("=============================================\n");
-	msm_hs_clock_unvote(msm_uport);
-=======
 static unsigned int use_low_power_rx_wakeup(struct msm_hs_port
 						   *msm_uport)
 {

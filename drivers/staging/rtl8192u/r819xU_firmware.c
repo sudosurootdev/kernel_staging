@@ -79,10 +79,6 @@ static bool fw_download_code(struct net_device *dev, u8 *code_virtual_address,
 		 * Transform from little endian to big endian
 		 * and pending  zero
 		 */
-			skb_queue_tail(&priv->ieee80211->skb_waitQ[tcb_desc->queue_index], skb);
-		} else {
-			priv->ieee80211->softmac_hard_start_xmit(skb,dev);
-=======
 		for (i = 0; i < frag_length; i += 4) {
 			*seg_ptr++ = ((i+0) < frag_length)?code_virtual_address[i+3] : 0;
 			*seg_ptr++ = ((i+1) < frag_length)?code_virtual_address[i+2] : 0;
@@ -111,17 +107,6 @@ static bool fw_download_code(struct net_device *dev, u8 *code_virtual_address,
 
 }
 
-			skb_queue_tail(&priv->ieee80211->skb_waitQ[tcb_desc->queue_index], skb);
-		} else {
-			priv->ieee80211->softmac_hard_start_xmit(skb,dev);
-		}
-
-	//PlatformReleaseSpinLock(Adapter, RT_TX_SPINLOCK);
-	return rtStatus;
-}
-
-
-=======
 //-----------------------------------------------------------------------------
 // Procedure:    Check whether main code is download OK. If OK, turn on CPU
 //

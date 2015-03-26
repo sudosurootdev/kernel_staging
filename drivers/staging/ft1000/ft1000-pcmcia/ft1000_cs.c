@@ -80,7 +80,6 @@ static int ft1000_confcheck(struct pcmcia_device *link, void *priv_data)
 
 /*======================================================================
 
-=======
   ft1000_config() is scheduled to run after a CARD_INSERTION event
   is received, to configure the PCMCIA socket, and to make the
   device available to the system.

@@ -676,7 +676,6 @@ inline struct sk_buff *ieee80211_authentication_req(struct ieee80211_network *be
 		auth->algorithm = WLAN_AUTH_SHARED_KEY;
 	else if(ieee->auth_mode == 2)
 		auth->algorithm = WLAN_AUTH_OPEN;//0x80;
-=======
 	printk("=================>%s():auth->algorithm is %d\n",__func__,auth->algorithm);
 	auth->transaction = cpu_to_le16(ieee->associate_seq);
 	ieee->associate_seq++;
@@ -1950,78 +1949,6 @@ ieee80211_rx_frame_softmac(struct ieee80211_device *ieee, struct sk_buff *skb,
 
 	switch (WLAN_FC_GET_STYPE(header->frame_ctl)) {
 
-									}
-								}
-								/* Dummy wirless mode setting to avoid encryption issue */
-								if(bSupportNmode) {
-									//N mode setting
-									ieee->SetWirelessMode(ieee->dev, \
-											ieee->current_network.mode);
-								}else{
-									//b/g mode setting
-									/*TODO*/
-									ieee->SetWirelessMode(ieee->dev, IEEE_G);
-								}
-
-								if (ieee->current_network.mode == IEEE_N_24G && bHalfSupportNmode == true)
-								{
-									printk("===============>entern half N mode\n");
-									ieee->bHalfWirelessN24GMode = true;
-								}
-								else
-									ieee->bHalfWirelessN24GMode = false;
-
-								ieee80211_associate_step2(ieee);
-							}else{
-								ieee80211_auth_challenge(ieee, challenge, chlen);
-							}
-						}else{
-							ieee->softmac_stats.rx_auth_rs_err++;
-							IEEE80211_DEBUG_MGMT("Authentication respose status code 0x%x",errcode);
-							ieee80211_associate_abort(ieee);
-						}
-
-					}else if (ieee->iw_mode == IW_MODE_MASTER){
-						ieee80211_rx_auth_rq(ieee, skb);
-					}
-				}
-			break;
-
-		case IEEE80211_STYPE_PROBE_REQ:
-
-			if ((ieee->softmac_features & IEEE_SOFTMAC_PROBERS) &&
-				((ieee->iw_mode == IW_MODE_ADHOC ||
-				ieee->iw_mode == IW_MODE_MASTER) &&
-				ieee->state == IEEE80211_LINKED)){
-				ieee80211_rx_probe_rq(ieee, skb);
-			}
-			break;
-
-		case IEEE80211_STYPE_DISASSOC:
-		case IEEE80211_STYPE_DEAUTH:
-			/* FIXME for now repeat all the association procedure
-			* both for disassociation and deauthentication
-			*/
-			if ((ieee->softmac_features & IEEE_SOFTMAC_ASSOCIATE) &&
-				ieee->state == IEEE80211_LINKED &&
-				ieee->iw_mode == IW_MODE_INFRA){
-
-				ieee->state = IEEE80211_ASSOCIATING;
-				ieee->softmac_stats.reassoc++;
-
-				notify_wx_assoc_event(ieee);
-				//HTSetConnectBwMode(ieee, HT_CHANNEL_WIDTH_20, HT_EXTCHNL_OFFSET_NO_EXT);
-				RemovePeerTS(ieee, header->addr2);
-				queue_work(ieee->wq, &ieee->associate_procedure_wq);
-			}
-			break;
-		case IEEE80211_STYPE_MANAGE_ACT:
-			ieee80211_process_action(ieee,skb);
-			break;
-		default:
-			return -1;
-			break;
-=======
 	case IEEE80211_STYPE_ASSOC_RESP:
 	case IEEE80211_STYPE_REASSOC_RESP:
 

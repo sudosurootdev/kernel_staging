@@ -515,13 +515,6 @@ The usage requirements of data dependency barriers are a little subtle, and
 it's not always obvious that they're needed.  To illustrate, consider the
 following sequence of events:
 
-	{ A == 1, B == 2, C = 3, P == &A, Q == &C }
-	B = 4;
-	<write barrier>
-	P = &B
-			Q = P;
-			D = *Q;
-=======
 	CPU 1		      CPU 2
 	===============	      ===============
 	{ A == 1, B == 2, C = 3, P == &A, Q == &C }
@@ -549,14 +542,6 @@ Alpha).
 To deal with this, a data dependency barrier or better must be inserted
 between the address load and the data load:
 
-	{ A == 1, B == 2, C = 3, P == &A, Q == &C }
-	B = 4;
-	<write barrier>
-	P = &B
-			Q = P;
-			<data dependency barrier>
-			D = *Q;
-=======
 	CPU 1		      CPU 2
 	===============	      ===============
 	{ A == 1, B == 2, C = 3, P == &A, Q == &C }
@@ -580,20 +565,6 @@ odd-numbered bank is idle, one can see the new value of the pointer P (&B),
 but the old value of the variable B (2).
 
 
-	{ M[0] == 1, M[1] == 2, M[3] = 3, P == 0, Q == 3 }
-	M[1] = 4;
-	<write barrier>
-	P = 1
-			Q = P;
-			<data dependency barrier>
-			D = M[Q];
-
-
-The data dependency barrier is very important to the RCU system, for example.
-See rcu_dereference() in include/linux/rcupdate.h.  This permits the current
-target of an RCU'd pointer to be replaced with a new modified target, without
-the replacement target appearing to be incompletely initialised.
-=======
 Another example of where data dependency barriers might be required is where a
 number is read from memory and then used to calculate the index for an array
 access:
@@ -852,22 +823,6 @@ SMP BARRIER PAIRING
 When dealing with CPU-CPU interactions, certain types of memory barrier should
 always be paired.  A lack of appropriate pairing is almost certainly an error.
 
-	a = 1;
-	<write barrier>
-	b = 2;		x = b;
-			<read barrier>
-			y = a;
-
-Or:
-
-	CPU 1		CPU 2
-	===============	===============================
-	a = 1;
-	<write barrier>
-	b = &a;		x = b;
-			<data dependency barrier>
-			y = *x;
-=======
 General barriers pair with each other, though they also pair with
 most other types of barriers, albeit without transitivity.  An acquire
 barrier pairs with a release barrier, but both may also pair with other
@@ -902,12 +857,6 @@ the "weaker" type.
 match the loads after the read barrier or the data dependency barrier, and vice
 versa:
 
-	a = 1;           }----   --->{  v = c
-	b = 2;           }    \ /    {  w = d
-	<write barrier>        \        <read barrier>
-	c = 3;           }    / \    {  x = a;
-	d = 4;           }----   --->{  y = b;
-=======
 	CPU 1                               CPU 2
 	===================                 ===================
 	ACCESS_ONCE(a) = 1;  }----   --->{  v = ACCESS_ONCE(c);
@@ -1204,11 +1153,6 @@ cache it for later use.
 
 Consider:
 
-	 	   		LOAD B
-	 	   		DIVIDE		} Divide instructions generally
-	 	   		DIVIDE		} take a long time to perform
-	 	   		LOAD A
-=======
 	CPU 1			CPU 2
 	=======================	=======================
 				LOAD B
@@ -1237,12 +1181,6 @@ Which might appear as this:
 Placing a read barrier or a data dependency barrier just before the second
 load:
 
-	 	   		LOAD B
-	 	   		DIVIDE
-	 	   		DIVIDE
-				<read barrier>
-	 	   		LOAD A
-=======
 	CPU 1			CPU 2
 	=======================	=======================
 				LOAD B
@@ -2145,9 +2083,6 @@ Other functions that imply barriers:
  (*) schedule() and similar imply full memory barriers.
 
 
-INTER-CPU LOCKING BARRIER EFFECTS
-=================================
-=======
 ===================================
 INTER-CPU ACQUIRING BARRIER EFFECTS
 ===================================

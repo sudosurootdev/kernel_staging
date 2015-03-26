@@ -20,11 +20,6 @@
 #include <net/pkt_cls.h>
 
 
-
-    Sources:
-
-    Fabio Checconi, Luigi Rizzo, and Paolo Valente: "QFQ: Efficient
-=======
 /*  Quick Fair Queueing Plus
     ========================
 

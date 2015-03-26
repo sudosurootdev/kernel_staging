@@ -1,23 +1,3 @@
-
-    A PCMCIA ethernet driver for the 3com 3c589 card.
-
-    Copyright (C) 1999 David A. Hinds -- dahinds@users.sourceforge.net
-
-    3c589_cs.c 1.162 2001/10/13 00:08:50
-
-    The network driver code is based on Donald Becker's 3c589 code:
-
-    Written 1994 by Donald Becker.
-    Copyright 1993 United States Government as represented by the
-    Director, National Security Agency.  This software may be used and
-    distributed according to the terms of the GNU General Public License,
-    incorporated herein by reference.
-    Donald Becker may be reached at becker@scyld.com
-
-    Updated for 2.5.x by Alan Cox <alan@lxorguk.ukuu.org.uk>
-
-======================================================================*/
-=======
 /* ======================================================================
  *
  * A PCMCIA ethernet driver for the 3com 3c589 card.

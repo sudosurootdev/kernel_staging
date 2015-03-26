@@ -1,21 +1,3 @@
-
-The codec driver is generic and hardware independent code that configures the
-codec to provide audio capture and playback. It should contain no code that is
-specific to the target platform or machine. All platform and machine specific
-code should be added to the platform and machine drivers respectively.
-
-Each codec driver *must* provide the following features:-
-
- 1) Codec DAI and PCM configuration
- 2) Codec control IO - using I2C, 3 Wire(SPI) or both APIs
- 3) Mixers and audio controls
- 4) Codec audio operations
-
-Optionally, codec drivers can also provide:-
-
- 5) DAPM description.
- 6) DAPM event handler.
-=======
 ASoC Codec Class Driver
 =======================
 

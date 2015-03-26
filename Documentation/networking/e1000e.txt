@@ -1,7 +1,3 @@
-
-Intel Gigabit Linux driver.
-Copyright(c) 1999 - 2010 Intel Corporation.
-=======
 Linux* Driver for Intel(R) Ethernet Network Connection
 ======================================================
 

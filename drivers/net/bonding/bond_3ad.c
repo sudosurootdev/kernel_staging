@@ -105,27 +105,6 @@ static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
 
 static const u8 lacpdu_mcast_addr[ETH_ALEN] = MULTICAST_LACPDU_ADDR;
 
-static int ad_lacpdu_send(struct port *port);
-static int ad_marker_send(struct port *port, struct bond_marker *marker);
-static void ad_mux_machine(struct port *port);
-static void ad_rx_machine(struct lacpdu *lacpdu, struct port *port);
-static void ad_tx_machine(struct port *port);
-static void ad_periodic_machine(struct port *port);
-static void ad_port_selection_logic(struct port *port);
-static void ad_agg_selection_logic(struct aggregator *aggregator);
-static void ad_clear_agg(struct aggregator *aggregator);
-static void ad_initialize_agg(struct aggregator *aggregator);
-static void ad_initialize_port(struct port *port, int lacp_fast);
-static void ad_enable_collecting_distributing(struct port *port);
-static void ad_disable_collecting_distributing(struct port *port);
-static void ad_marker_info_received(struct bond_marker *marker_info, struct port *port);
-static void ad_marker_response_received(struct bond_marker *marker, struct port *port);
-
-
-/////////////////////////////////////////////////////////////////////////////////
-// ================= api to bonding and kernel code ==================
-/////////////////////////////////////////////////////////////////////////////////
-=======
 /* ================= main 802.3ad protocol functions ================== */
 static int ad_lacpdu_send(struct port *port);
 static int ad_marker_send(struct port *port, struct bond_marker *marker);
@@ -412,8 +391,6 @@ static u16 __ad_timer_to_ticks(u16 timer_type, u16 par)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-=======
 /* ================= ad_rx_machine helper functions ================== */
 
 /**
@@ -778,8 +755,6 @@ static inline void __update_lacpdu_from_port(struct port *port)
 	 */
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-=======
 /* ================= main 802.3ad protocol code ========================= */
 
 /**
@@ -1846,14 +1821,6 @@ static void ad_marker_info_received(struct bond_marker *marker_info,
  * information.
  */
 static void ad_marker_response_received(struct bond_marker *marker,
-//////////////////////////////////////////////////////////////////////////////////////
-
-// Check aggregators status in team every T seconds
-#define AD_AGGREGATOR_SELECTION_TIMER  8
-
-/*
- * bond_3ad_initiate_agg_selection(struct bonding *bond)
-=======
 					struct port *port)
 {
 	marker = NULL;

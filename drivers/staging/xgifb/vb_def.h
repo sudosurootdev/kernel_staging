@@ -19,15 +19,6 @@
 
 #define XGI_CRT2_PORT_00        (0x00 - 0x030)
 
-   for 310
-============================================================== */
-#define ModeSoftSetting              0x04
-
-/* ---------------- SetMode Stack */
-#define CRT1Len           15
-#define VCLKLen           4
-
-=======
 #define SupportAllCRT2      0x0078
 #define NoSupportTV         0x0070
 #define NoSupportHiVisionTV 0x0060

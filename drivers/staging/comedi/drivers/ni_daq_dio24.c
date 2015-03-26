@@ -71,58 +71,6 @@ static struct comedi_driver driver_dio24 = {
 
 static int dio24_cs_attach(struct pcmcia_device *link)
 {
-
-static const struct pcmcia_device_id dio24_cs_ids[] = {
-	/* N.B. These IDs should match those in dio24_boards */
-	PCMCIA_DEVICE_MANF_CARD(0x010b, 0x475c),	/* daqcard-dio24 */
-	PCMCIA_DEVICE_NULL
-};
-
-MODULE_DEVICE_TABLE(pcmcia, dio24_cs_ids);
-MODULE_AUTHOR("Daniel Vecino Castel <dvecino@able.es>");
-MODULE_DESCRIPTION("Comedi driver for National Instruments "
-		   "PCMCIA DAQ-Card DIO-24");
-MODULE_LICENSE("GPL");
-
-struct pcmcia_driver dio24_cs_driver = {
-	.probe = dio24_cs_attach,
-	.remove = dio24_cs_detach,
-	.suspend = dio24_cs_suspend,
-	.resume = dio24_cs_resume,
-	.id_table = dio24_cs_ids,
-	.owner = THIS_MODULE,
-	.name = "ni_daq_dio24",
-};
-
-static int __init init_dio24_cs(void)
-{
-	printk("ni_daq_dio24: HOLA SOY YO!\n");
-	pcmcia_register_driver(&dio24_cs_driver);
-	return 0;
-}
-
-static void __exit exit_dio24_cs(void)
-{
-	pcmcia_unregister_driver(&dio24_cs_driver);
-}
-
-int __init init_module(void)
-{
-	int ret;
-
-	ret = init_dio24_cs();
-	if (ret < 0)
-		return ret;
-
-	return comedi_driver_register(&driver_dio24);
-}
-
-void __exit cleanup_module(void)
-{
-	exit_dio24_cs();
-	comedi_driver_unregister(&driver_dio24);
-}
-=======
 	return comedi_pcmcia_auto_config(link, &driver_dio24);
 }
 

@@ -1,12 +1,3 @@
-// CopyRight (C) 2007 Qualcomm Inc. All Rights Reserved.
-//
-//
-// This file is part of Express Card USB Driver
-//
-// $Id:
-//====================================================
-#include <linux/init.h>
-=======
 /* CopyRight (C) 2007 Qualcomm Inc. All Rights Reserved.
  *
  *

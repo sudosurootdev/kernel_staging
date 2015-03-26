@@ -45,11 +45,6 @@ rescue floppy disk.
 	==============
 
 This parameter tells the RAM disk driver to set up RAM disks of N k size.  The
-
-This parameter tells the RAM disk driver how many bytes to use per block.  The
-default is 1024 (BLOCK_SIZE).
-
-=======
 default is 4096 (4 MB).
 
 2b) Module parameters
